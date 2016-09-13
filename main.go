@@ -16,12 +16,12 @@ import (
 	"net/http"
 
 	"github.com/cfrank/tny.al/api"
-	"github.com/cfrank/tny.al/handlelink"
+	"github.com/cfrank/tny.al/shortlink"
 )
 
 func apiHandle(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	fmt.Print("HEllo from api")
-	handlelink.Hello("CHris")
+	shortlink.Hello("CHris")
 	api.Handle()
 }
 
@@ -36,7 +36,7 @@ func main() {
 
 	// Handles all link requests.
 	// The static index page is handled by nginx
-	router.GET("/:linkId", handlelink.UnShorten)
+	router.GET("/:linkId", shortlink.UnShorten)
 
 	// Handles all API routes
 	api := router.NewGroup("/api")

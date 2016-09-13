@@ -7,7 +7,7 @@
  * housed in this directory
  */
 
-package handlelink
+package shortlink
 
 import (
 	"fmt"
