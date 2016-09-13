@@ -1,10 +1,12 @@
 /*
-	Package main
+ * This is the main entry point of the application all non-static
+ * routes are sent here from nginx and routed to their respective
+ * handlers, namely:
+ * - API
+ * - link
+ * - Admin
+ */
 
-	-- Entry file for tny.al backend
-
-	-- Incoming routes are sent to their respective handler functions
-*/
 package main
 
 import (
@@ -13,11 +15,14 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/cfrank/tny.al/api"
 	"github.com/cfrank/tny.al/handlelink"
 )
 
 func apiHandle(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	fmt.Print("HEllo from api")
+	handlelink.Hello("CHris")
+	api.Handle()
 }
 
 func adminHandle(w http.ResponseWriter, req *http.Request, params map[string]string) {
@@ -31,7 +36,7 @@ func main() {
 
 	// Handles all link requests.
 	// The static index page is handled by nginx
-	router.GET("/:linkId", handlelink.LinkHandler)
+	router.GET("/:linkId", handlelink.UnShorten)
 
 	// Handles all API routes
 	api := router.NewGroup("/api")
