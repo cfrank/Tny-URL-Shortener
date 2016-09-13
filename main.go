@@ -12,12 +12,9 @@ import (
 	"github.com/idawes/httptreemux"
 	"log"
 	"net/http"
-)
 
-func link(w http.ResponseWriter, req *http.Request, params map[string]string) {
-	linkId := params["linkId"]
-	fmt.Fprintf(w, "The link with id %s was requested\r\n", linkId)
-}
+	"github.com/cfrank/tny.al/handlelink"
+)
 
 func apiHandle(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	fmt.Print("HEllo from api")
@@ -34,7 +31,7 @@ func main() {
 
 	// Handles all link requests.
 	// The static index page is handled by nginx
-	router.GET("/:linkId", link)
+	router.GET("/:linkId", handlelink.LinkHandler)
 
 	// Handles all API routes
 	api := router.NewGroup("/api")
