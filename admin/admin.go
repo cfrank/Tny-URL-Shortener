@@ -1,13 +1,12 @@
 /*
- * This is the entry point for the api
- * Calls to any api endpoint are routed through here and handled with
- * the Handle() function
+ * This is the entry point for the admin interface
+ * Any call within the admin interface will be sent through here
  *
  * Any other helper functions are included under this package and
  * housed in this directory
  */
 
-package api
+package admin
 
 import (
 	"fmt"
@@ -15,5 +14,5 @@ import (
 )
 
 func Handle(w http.ResponseWriter, req *http.Request, params map[string]string) {
-	fmt.Printf("%s", "Hello World12121")
+	fmt.Fprintf(w, "From the admin: %s", params["task"])
 }

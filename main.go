@@ -3,7 +3,7 @@
  * routes are sent here from nginx and routed to their respective
  * handlers, namely:
  * - API
- * - link
+ * - shortlink
  * - Admin
  */
 
@@ -15,36 +15,25 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/cfrank/tny.al/admin"
 	"github.com/cfrank/tny.al/api"
 	"github.com/cfrank/tny.al/shortlink"
 )
 
-func apiHandle(w http.ResponseWriter, req *http.Request, params map[string]string) {
-	fmt.Print("HEllo from api")
-	shortlink.Hello("CHris")
-	api.Handle()
-}
-
-func adminHandle(w http.ResponseWriter, req *http.Request, params map[string]string) {
-	task := params["task"]
-	fmt.Fprintf(w, "The admin function you requested was: %s", task)
-}
-
 func main() {
 	fmt.Print("Starting web server...")
-	router := httptreemux.New()
 
-	// Handles all link requests.
-	// The static index page is handled by nginx
+	// Handles all link requests
+	router := httptreemux.New()
 	router.GET("/:linkId", shortlink.UnShorten)
 
 	// Handles all API routes
-	api := router.NewGroup("/api")
-	api.GET("/hello", apiHandle)
+	apiRoute := router.NewGroup("/api")
+	apiRoute.GET("/hello", api.Handle)
 
 	// Handles all Admin routes
-	admin := router.NewGroup("/admin")
-	admin.GET("/:task", adminHandle)
+	adminRoute := router.NewGroup("/admin")
+	adminRoute.GET("/:task", admin.Handle)
 
 	log.Fatal(http.ListenAndServe(":8081", router))
 }
