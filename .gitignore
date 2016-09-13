@@ -28,3 +28,4 @@ _testmain.go
 
 # Project specific ignores
 logs/
+tny.al
