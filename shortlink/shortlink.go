@@ -16,9 +16,5 @@ import (
 
 func UnShorten(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	linkId := params["linkId"]
-	fmt.Fprintf(w, "The link with id %s was requested!\r\n", linkId)
-}
-
-func Hello(input string) {
-	fmt.Printf("%s", input)
+	fmt.Fprintf(w, "The link with id %s was requested!!\r\n", linkId)
 }

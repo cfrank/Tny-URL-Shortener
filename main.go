@@ -21,10 +21,14 @@ import (
 )
 
 func main() {
+	const PORT string = ":8081"
+
 	fmt.Print("Starting web server...")
 
-	// Handles all link requests
+	// Define the mux
 	router := httptreemux.New()
+
+	// Handles all link requests
 	router.GET("/:linkId", shortlink.UnShorten)
 
 	// Handles all API routes
@@ -35,5 +39,6 @@ func main() {
 	adminRoute := router.NewGroup("/admin")
 	adminRoute.GET("/:task", admin.Handle)
 
-	log.Fatal(http.ListenAndServe(":8081", router))
+	// Serve
+	log.Fatal(http.ListenAndServe(PORT, router))
 }
