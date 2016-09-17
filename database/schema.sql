@@ -10,11 +10,12 @@
 --
 
 CREATE TABLE `link` (
-        `linkid` CHAR(6) DEFAULT NULL,
-        `created` DATE DEFAULT NULL,
+        `linkid` CHAR(6) NOT NULL,
+        `source` VARCHAR(2083) NOT NULL,
+        `created` DATETIME DEFAULT CURRENT_TIMESTAMP,
         `userid` CHAR(10) DEFAULT NULL,
         `abuseflags` SMALLINT UNSIGNED DEFAULT 0,
         `clicks` INT UNSIGNED DEFAULT 0,
-        `expires` DATE DEFAULT NULL,
+        `expires` DATETIME DEFAULT NULL,
         PRIMARY KEY (`linkid`)
 )ENGINE=INNODB
