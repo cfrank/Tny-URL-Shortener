@@ -1,0 +1,44 @@
+{
+  "name": "tny.al",
+  "version": "0.1.0",
+  "description": "The static front end for tny URL shortener",
+  "main": "js/index.js",
+  "dependencies": {
+    "vue": "^1.0.26"
+  },
+  "devDependencies": {
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-runtime": "^6.11.6",
+    "css-loader": "^0.25.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "node-sass": "^3.10.0",
+    "sass-loader": "^4.0.2",
+    "vue-hot-reload-api": "^2.0.6",
+    "vue-html-loader": "^1.2.3",
+    "vue-loader": "^8.5.2",
+    "vue-style-loader": "^1.0.0",
+    "webpack": "^1.13.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cfrank/Tny-URL-Shortener.git"
+  },
+  "keywords": [
+    "tny",
+    "url",
+    "shortener",
+    "vue"
+  ],
+  "author": "Chris Frank <chris@cfrank.org>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/cfrank/Tny-URL-Shortener/issues"
+  },
+  "homepage": "https://github.com/cfrank/Tny-URL-Shortener#readme"
+}

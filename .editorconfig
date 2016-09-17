@@ -1,0 +1,2 @@
+[*.{css,html,vue}]
+indent_size = 4
