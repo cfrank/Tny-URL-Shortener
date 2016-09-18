@@ -1,9 +1,9 @@
 import Vue from 'vue';
-import App from './components/app.vue';
+import Page from './components/page.vue';
 
 new Vue({
-        el: '.container',
+        el: 'body',
         components: {
-                App
+                Page
         }
 })

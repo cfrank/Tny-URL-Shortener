@@ -64,7 +64,7 @@ module.exports = {
         
         plugins: plugins,
         
-        /* Default to watching */
+        /* Default to watching with some extras */
         watch: true,
         progress: true,
         colors: true
