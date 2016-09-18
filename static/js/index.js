@@ -1,6 +1,9 @@
 import Vue from 'vue';
-import test from './components/test.vue';
+import App from './components/app.vue';
 
-const hello = "hello, world! Test";
-
-console.log(`Say ${hello}`);
+new Vue({
+        el: '.container',
+        components: {
+                App
+        }
+})

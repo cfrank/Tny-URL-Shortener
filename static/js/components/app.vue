@@ -1,6 +1,6 @@
 <template>
     <div class="testing">
-        <p>HEllo world!</p>
+        <p>{{message}}</p>
     </div>
 </template>
 
@@ -18,3 +18,13 @@
         }
     }
 </style>
+
+<script>
+    export default {
+        data() {
+            return {
+                message: 'Hello from a component'
+            }
+        }
+    }
+</script>
