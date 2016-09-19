@@ -1,2 +1,2 @@
-[*.{css,html,vue}]
+[*.{css,html,vue,scss}]
 indent_size = 4

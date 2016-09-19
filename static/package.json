@@ -4,7 +4,10 @@
   "description": "The static front end for tny URL shortener",
   "main": "js/index.js",
   "dependencies": {
-    "vue": "^1.0.26"
+    "vue": "^2.0.0-rc.1",
+    "vue-router": "^2.0.0-rc.3",
+    "vuex": "^2.0.0-rc.4",
+    "vuex-router-sync": "^3.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",

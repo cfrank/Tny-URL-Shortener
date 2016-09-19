@@ -1,25 +1,31 @@
+<!-- The main shortener component -->
 <template>
-    <!-- The main shortener component -->
-    <div class="page-container">
+    <div class="page-container flex-box">
         <shorten></shorten>
     </div>
 </template>
 
 <style lang="sass">
-    @import '../../css/variables.scss';
     /* Main styling of the page with globals */
+    @import '../../css/header.scss';
+    
     *{
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
-    
+
+    html,
     body{
         width: 100%;
         height: 100%;
-        background-color: $test;
+    }
+
+    body{
+        background-color: $bg-color;
     }
     
+    .container,
     .page-container{
         width: 100%;
         height: 100%;

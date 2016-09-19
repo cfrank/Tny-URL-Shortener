@@ -1,8 +1,8 @@
-import Vue from 'vue';
+import Vue from 'vue/dist/vue';
 import Page from './components/page.vue';
 
-new Vue({
-        el: 'body',
+const vm = new Vue({
+        el: '.container',
         components: {
                 Page
         }
