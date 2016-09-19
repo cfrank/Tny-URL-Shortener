@@ -1,6 +1,7 @@
 <template>
     <!-- The main shortener component -->
-    <p>{{ message }}</p>
+    <div class="shorten-container">
+    </div>
 </template>
 
 <script>
