@@ -2,9 +2,8 @@
 <template>
     <div class="viewport">
         <!-- Error handler -->
-        <!-- Shortener -->
-        <shorten-view></shorten-view>
-        <!-- Anouncements -->
+        <!-- View component -->
+        <router-view></router-view>
         <!-- Menu -->
     </div>
 </template>
@@ -34,13 +33,4 @@
 </style>
 
 <script>
-    import ShortenView from './views/ShortenView.vue';
-    
-    export default{
-        name: 'app',
-        
-        components:{
-            ShortenView
-        }
-    }
 </script>

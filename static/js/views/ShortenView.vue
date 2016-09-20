@@ -16,8 +16,6 @@
     import ShortenForm from '../components/ShortenForm.vue';
     
     export default{
-        name: 'shorten-view',
-        
         components:{
             ShortenForm
         },

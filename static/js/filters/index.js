@@ -51,7 +51,7 @@ export function ValidateUrl(input, recursive = false){
                 }
         }
         else{
-                throw new InvalidLinkError("Link is too large");
+                throw new InvalidLinkError("Link is of incorrect length");
         }
         
         returnedURL = href;

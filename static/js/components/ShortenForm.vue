@@ -58,7 +58,7 @@
 </style>
 
 <script>
-    import * as Utils from '../filters/index.js';
+    import {ValidateUrl} from '../filters/index.js';
     
     export default{
         name: 'shorten-form',
@@ -77,7 +77,7 @@
             submit: function(){
                 try{
                     // Returns the URIEncoded url when successful
-                    let encodedUrl = Utils.ValidateUrl(this.value);
+                    let encodedUrl = ValidateUrl(this.value);
                 } catch(e){
                     console.log(e.message);
                 }
