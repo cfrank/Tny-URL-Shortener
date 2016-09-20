@@ -23,7 +23,7 @@ import (
 func main() {
 	const PORT string = ":8081"
 
-	fmt.Print("Starting web server...")
+	fmt.Printf("Starting web server on %s...", PORT)
 
 	// Define the mux
 	router := httptreemux.New()
@@ -33,7 +33,7 @@ func main() {
 
 	// Handles all API routes
 	apiRoute := router.NewGroup("/api")
-	apiRoute.GET("/hello", api.Handle)
+	apiRoute.POST("/add", api.Add)
 
 	// Handles all Admin routes
 	adminRoute := router.NewGroup("/admin")
