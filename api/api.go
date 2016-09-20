@@ -11,20 +11,18 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/cfrank/tny.al/utils"
 	"net/http"
 	"time"
 )
 
 type Link struct {
-	linkid     string    `json:"linkid"`
-	source     string    `json:"source"`
-	created    time.Time `json:"created"`
-	userid     string    `json:"userid"`
-	abuseflags uint16    `json:"abuseflags"`
-	clicks     uint      `json:"clicks"`
-	expires    time.Time `json:"expires"`
+	Linkid     string    `json:"linkid"`
+	Source     string    `json:"source"`
+	Created    time.Time `json:"created"`
+	Userid     string    `json:"userid"`
+	Abuseflags uint16    `json:"abuseflags"`
+	Clicks     uint      `json:"clicks"`
+	Expires    time.Time `json:"expires"`
 }
 
 type Test struct {
