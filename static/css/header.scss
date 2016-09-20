@@ -1,5 +1,21 @@
 // Variables
+
+// - Colors
 $bg-color: #f0efeb;
 $grey-text: #b1b1b1;
 $teal: #03b4e0;
 $elm-shadow: 0px 1px 1px 0px rgba(193, 192, 192, 0.35);
+
+// -Fonts
+$pt-sans: 'PT Sans', sans-serif;
+
+// Functions
+@function rem-calc($value){
+    @return ($value / 16px) * 1rem;
+}
+
+// Mixins
+@mixin fontSize($size){
+    font-size: $size;
+    font-size: rem-calc($size);
+}

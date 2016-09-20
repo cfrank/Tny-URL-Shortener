@@ -2,6 +2,8 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var production = minimize = process.argv.indexOf('--production') !== -1;
 
+const entry = './js/app.js';
+
 /*
  * If you want to minify assets provide the --production flag
  * to the webpack binary
@@ -21,7 +23,7 @@ else{
 }
 
 module.exports = {
-        entry: './js/index.js',
+        entry: entry,
         output: {
                 path: __dirname,
                 filename: 'js/out/build.js'
