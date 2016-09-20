@@ -18,11 +18,17 @@
             height: 100%;
             padding: 0px 10px;
             border: none;
+            background-color: rgba(255,255,255,0.8);
             box-shadow: $elm-shadow;
+            transition: background-color 0.2s ease-in-out;
             
             font-family: $pt-sans;
             @include fontSize(18px);
             color: $grey-text;
+            
+            &:focus{
+                background-color: #fff;
+            }
         }
         
         & > .shorten-form-submit{
@@ -70,8 +76,8 @@
              */
             submit: function(){
                 try{
-                    let hello = Utils.ValidateUrl(this.value);
-                    console.log(hello);
+                    // Returns the URIEncoded url when successful
+                    let encodedUrl = Utils.ValidateUrl(this.value);
                 } catch(e){
                     console.log(e.message);
                 }
