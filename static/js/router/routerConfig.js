@@ -1,4 +1,8 @@
+import Vue from 'vue/dist/vue';
+import VueRouter from 'vue-router';
 import ShortenView from '../views/ShortenView.vue';
+
+Vue.use(VueRouter); // Expose Vuerouter to Vue
 
 /*
  * --IMPORTENT!--
@@ -6,16 +10,23 @@ import ShortenView from '../views/ShortenView.vue';
  * /pages/ directory or else it will not be routed correctly
  * by nginx!
  */
-const routes = [
+
+const configRoutes = [
         {
                 path: '/',
                 component: ShortenView
         }
 ]
 
-export const routerData = routes.map((obj) => {
+const routerData = configRoutes.map((obj) => {
         let routeObj = {}
         routeObj['path'] = obj.path;
         routeObj['component'] = obj.component;
         return routeObj;
+});
+
+export const routes = new VueRouter({
+        hashbang: false,
+        mode: 'history',
+        routes: routerData
 });

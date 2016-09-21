@@ -1,16 +1,9 @@
 import Vue from 'vue/dist/vue';
+import Vuex from 'vuex';
+import {routes} from './router';
 import App from './App.vue';
-import ShortenView from './views/ShortenView.vue';
-import VueRouter from 'vue-router';
-import {routerData} from './router';
 
-Vue.use(VueRouter);
-
-const routes = new VueRouter({
-        hashbang: false,
-        mode: 'history',
-        routes: routerData
-});
+Vue.use(Vuex); // Expose Vuex to Vue
 
 /* Instead of including a polyfill for `...` use
  * Vue.util.extend
