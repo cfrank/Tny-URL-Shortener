@@ -7,8 +7,8 @@ import {routerData} from './router';
 Vue.use(VueRouter);
 
 const routes = new VueRouter({
-        history: true,
-        saveScrollPosition: true,
+        hashbang: false,
+        mode: 'history',
         routes: routerData
 });
 
