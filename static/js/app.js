@@ -1,13 +1,16 @@
-import Vue from 'vue/dist/vue';
-import Vuex from 'vuex';
-import {routes} from './router';
+import Vue from 'vue';
+import {sync} from 'vuex-router-sync';
+
+import router from './router/routeConfig';
+import store from './vuex/store';
 import App from './App.vue';
 
-Vue.use(Vuex); // Expose Vuex to Vue
+sync(store, router);
 
-/* Instead of including a polyfill for `...` use
- * Vue.util.extend
- */
-new Vue(Vue.util.extend({
-        router: routes
-}, App)).$mount('.root');
+console.log(store);
+
+const app = new Vue({
+        router: router,
+        store: store,
+        render: h => h(App)
+}).$mount('.root');

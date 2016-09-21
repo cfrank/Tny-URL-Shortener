@@ -24,6 +24,13 @@ else{
 
 module.exports = {
         entry: entry,
+        
+        resolve: {
+                alias:{
+                        vue: 'vue/dist/vue.js'
+                }
+        },
+        
         output: {
                 path: __dirname,
                 filename: 'js/out/build.js'

@@ -32,5 +32,8 @@
     }
 </style>
 
-<script>
+<script>    
+    export default{
+        name: 'AppView'
+    }
 </script>
