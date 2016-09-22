@@ -7,8 +7,6 @@ import App from './App.vue';
 
 sync(store, router);
 
-console.log(store);
-
 const app = new Vue({
         router: router,
         store: store,

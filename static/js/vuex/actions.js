@@ -1,0 +1,7 @@
+export const showNotice = ({commit}, payload) => {
+        const show = true;
+        const message = payload.message;
+        const type = payload.type;
+        
+        commit('SHOW_NOTICE', {show, message, type});
+}

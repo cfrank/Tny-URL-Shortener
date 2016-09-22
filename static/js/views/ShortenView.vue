@@ -1,7 +1,6 @@
 <template>
     <div class="shorten-container">
         <shorten-form></shorten-form>
-        <p :data-test="testing">{{testing}}</p>
     </div>
 </template>
 
@@ -14,9 +13,6 @@
 </style>
 
 <script>
-    import store from '../vuex/store';
-    import { mapGetters } from 'vuex';
-    
     import ShortenForm from '../components/ShortenForm.vue';
     
     export default{
@@ -25,12 +21,6 @@
         components:{
             ShortenForm
         },
-        
-        created(){
-            console.log(this);
-        },
-        
-        computed: mapGetters([ 'testing' ]),
         
         data(){
             return{

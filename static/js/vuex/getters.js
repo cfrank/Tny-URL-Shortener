@@ -1,3 +1,3 @@
-export const testing = state => {
-        return state.testing;
+export const notice = state => {
+        return state.notice;
 }

@@ -2,6 +2,7 @@
 <template>
     <div class="viewport">
         <!-- Error handler -->
+        <notice-header></notice-header>
         <!-- View component -->
         <router-view></router-view>
         <!-- Menu -->
@@ -16,10 +17,7 @@
         box-sizing: border-box;
     }
     
-    /* XXX: Not sure anyother way to do this... */
-    html,
-    body,
-    .root,
+    html,body,
     .viewport{
         height: 100%;
     }
@@ -32,8 +30,14 @@
     }
 </style>
 
-<script>    
+<script>
+    import NoticeHeader from './components/NoticeHeader.vue';
+    
     export default{
-        name: 'AppView'
+        name: 'AppView',
+        
+        components:{
+            NoticeHeader
+        },
     }
 </script>

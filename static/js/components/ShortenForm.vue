@@ -59,6 +59,7 @@
 
 <script>
     import {ValidateUrl} from '../filters/index.js';
+    import store from '../vuex/store';
     
     export default{
         name: 'shorten-form',
@@ -79,7 +80,10 @@
                     // Returns the URIEncoded url when successful
                     let encodedUrl = ValidateUrl(this.value);
                 } catch(e){
-                    console.log(e.message);
+                    store.dispatch('showNotice', {
+                        message: e.message,
+                        type: 'error',
+                    })
                 }
             }
         }
