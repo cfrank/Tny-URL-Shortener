@@ -5,3 +5,7 @@ export const showNotice = ({commit}, payload) => {
         
         commit('SHOW_NOTICE', {show, message, type});
 }
+
+export const hideNotice = ({commit}) => {
+        commit('HIDE_NOTICE');
+}

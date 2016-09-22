@@ -83,7 +83,11 @@
                     store.dispatch('showNotice', {
                         message: e.message,
                         type: 'error',
-                    })
+                    });
+                    
+                    setTimeout(() =>{
+                        store.dispatch('hideNotice');
+                    }, 5000);
                 }
             }
         }
