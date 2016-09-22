@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import {GetUID} from '../filters/';
 import * as getters from './getters';
 import * as actions from './actions';
 import mutations from './mutations';
@@ -24,6 +25,7 @@ const NOTIFICATION_HEADER = {
 
 const state = {
         notice: NOTIFICATION_HEADER,
+        userId: GetUID(),
 };
 
 const store =  new Vuex.Store({
@@ -32,5 +34,7 @@ const store =  new Vuex.Store({
         mutations,
         state,
 });
+
+console.log(state.userId);
 
 export default store;

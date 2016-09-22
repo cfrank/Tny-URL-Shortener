@@ -40,18 +40,11 @@
 </style>
 
 <script>
-    import store from '../vuex/store';
     import { mapGetters } from 'vuex';
     
     export default{
         name: 'notice-header',
-        
+        // Get state
         computed: mapGetters([ 'notice' ]),
-        
-        computed:{
-            notice(){
-                return this.$store.state.notice;
-            }
-        }
     }
 </script>

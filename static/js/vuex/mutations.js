@@ -1,3 +1,5 @@
+import {USERID_LOCALHOST} from '../filters/';
+
 export default{
         SHOW_NOTICE(state, message){
                 state.notice = message;
@@ -9,5 +11,10 @@ export default{
                         message: '',
                         type: '',
                 }
+        },
+        
+        REMOVE_UID(state){
+                window.localStorage.removeItem(USERID_LOCALHOST);
+                state.userId = '';
         }
 }

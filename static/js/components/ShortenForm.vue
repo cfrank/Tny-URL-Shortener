@@ -77,17 +77,27 @@
              */
             submit: function(){
                 try{
-                    // Returns the URIEncoded url when successful
-                    let encodedUrl = ValidateUrl(this.value);
+                    // Create the object which will be sent to the db
+                    let linkData = {
+                        encodedUrl: ValidateUrl(this.value),
+                        userid: this.$store.state.userId,
+                        date: ~~(Date.now() / 1000),
+                    };
+                    console.log(linkData);
                 } catch(e){
-                    store.dispatch('showNotice', {
-                        message: e.message,
-                        type: 'error',
-                    });
-                    
-                    setTimeout(() =>{
-                        store.dispatch('hideNotice');
-                    }, 5000);
+                    // Only show the error if it's not already visible
+                    if(!this.$store.state.notice.show){
+                        store.dispatch('showNotice', {
+                            message: e.message,
+                            type: 'error',
+                        });
+                        
+                        setTimeout(() =>{
+                            // Only fire if it is still showing
+                            if(this.$store.state.notice.show)
+                                store.dispatch('hideNotice');
+                        }, 5000);
+                    }
                 }
             }
         }

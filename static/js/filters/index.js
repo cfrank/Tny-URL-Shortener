@@ -1,3 +1,7 @@
+import * as Constants from './constants.js';
+import InvalidLinkError from './ErrorClass.js';
+import Store from '../vuex/store';
+
 /*
  * Parse and validate the url
  * 
@@ -12,8 +16,6 @@
  * 
  * @returns String|Error 
  */
-import InvalidLinkError from './ErrorClass.js';
-
 export function ValidateUrl(input, recursive = false){
         let parser = document.createElement('a');
         parser.href = input;
@@ -41,7 +43,7 @@ export function ValidateUrl(input, recursive = false){
                 }
                 
                 /* Hostnames cant start with a punctuation */
-                if(puncRegex.test(hostname.charAt(0))){
+                if(puncRegex.test(hostname.replace('www.','').charAt(0))){
                         throw new InvalidLinkError("Links cant start with punctuation");
                 }
                 
@@ -57,4 +59,40 @@ export function ValidateUrl(input, recursive = false){
         returnedURL = href;
         parser = null;
         return returnedURL;
+}
+
+/*
+ * Generate a key
+ * 
+ * @param int length
+ * @return string
+ */
+function generateKey(length){
+        let key = '';
+        for(let i = 0; i < length; ++i){
+                key += Constants.KEYSPACE[~~(Math.random() * (Constants.KEYSPACE.length))];
+        }
+        return key;
+}
+
+/*
+ * Return a UID for a user
+ * 
+ * This will return a UID for a user either by finding the currently
+ * set UID, or generating a new one
+ * 
+ * @retuns string|error
+ */
+export function GetUID(){
+        if(window.localStorage.getItem(Constants.USERID_LOCALHOST) !== null){
+                // Get already existing uid
+                return window.localStorage.getItem(Constants.USERID_LOCALHOST);
+        }
+        else{
+                // Generate new uid
+                let key = generateKey(Constants.UID_LEN);
+                // Set the key in localStorage
+                window.localStorage.setItem(Constants.USERID_LOCALHOST, key);
+                return key;
+        }
 }

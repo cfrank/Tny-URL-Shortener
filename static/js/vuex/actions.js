@@ -9,3 +9,7 @@ export const showNotice = ({commit}, payload) => {
 export const hideNotice = ({commit}) => {
         commit('HIDE_NOTICE');
 }
+
+export const removeUid = ({commit}) => {
+        commit('REMOVE_UID');
+}
