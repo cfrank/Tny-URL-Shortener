@@ -43,7 +43,7 @@
             
             font-family: $pt-sans;
             @include fontSize(18px);
-            color: $teal;
+            color: $teal-text;
             
             /* Remove the dotted line FireFox */
             &::-moz-focus-inner{
@@ -58,8 +58,8 @@
 </style>
 
 <script>
-    import {ValidateUrl} from '../filters/index.js';
     import store from '../vuex/store';
+    import {ValidateUrl} from '../filters/index.js';
     
     export default{
         name: 'shorten-form',
@@ -83,7 +83,6 @@
                         userid: this.$store.state.userId,
                         date: ~~(Date.now() / 1000),
                     };
-                    console.log(linkData);
                 } catch(e){
                     // Only show the error if it's not already visible
                     if(!this.$store.state.notice.show){
