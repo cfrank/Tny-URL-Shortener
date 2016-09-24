@@ -1,7 +1,11 @@
 <template>
     <div class="shorten">
         <shorten-form></shorten-form>
-        <link-success title="Your short link:" linkhref="https://www.google.com"></link-success>
+        <link-success 
+            :active="linkSuccess.active" 
+            :title="linkSuccess.title" 
+            :linkhref="linkSuccess.linkHref">
+        </link-success>
     </div>
 </template>
 
@@ -14,6 +18,8 @@
 </style>
 
 <script>
+    import {mapGetters} from 'vuex';
+    
     import ShortenForm from '../components/ShortenForm.vue';
     import LinkSuccess from '../components/LinkSuccess.vue';
     
@@ -25,10 +31,6 @@
             LinkSuccess
         },
         
-        data(){
-            return{
-                message: 'Hello from ShortenView'
-            }
-        }
+        computed: mapGetters([ 'linkSuccess' ])
     }
 </script>

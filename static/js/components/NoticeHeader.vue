@@ -1,5 +1,5 @@
 <template>
-    <div class="notice-header" :class="{'showing': notice.show}">
+    <div class="notice-header" :class="{'active': notice.active}">
         <p :class="notice.type">{{notice.message}}</p>
     </div>
 </template>
@@ -20,7 +20,7 @@
         transform: translateY(-100%);
         transition: transform 0.3s ease-out;
         
-        &.showing{
+        &.active{
             transform: translateY(0%);
         }
         

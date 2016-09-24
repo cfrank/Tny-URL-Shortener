@@ -7,9 +7,21 @@ export default{
         
         HIDE_NOTICE(state){
                 state.notice = {
-                        show: false,
+                        active: false,
                         message: '',
                         type: '',
+                }
+        },
+        
+        SHOW_LINK_SUCCESS(state, message){
+                state.linkSuccess = message;
+        },
+        
+        HIDE_LINK_SUCCESS(state){
+                state.linkSuccess = {
+                        active: false,
+                        message: '',
+                        linkHref: '',
                 }
         },
         

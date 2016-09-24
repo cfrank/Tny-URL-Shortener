@@ -10,7 +10,7 @@ Vue.use(Vuex);
 /*
  * State for the notice-header component
  * 
- * Show -> If the component should be shown
+ * Active -> If the component should be shown
  * Message -> The message to show
  * Type -> The type of notification
  *      error -> Problem occured
@@ -18,14 +18,29 @@ Vue.use(Vuex);
  *      success -> Successful operation occured
  */
 const NOTIFICATION_HEADER = {
-        show: false,
+        active: false,
         message: '',
-        type: 'error',
+        type: '',
+}
+/*
+ * State for the message shown on successful link return
+ * 
+ * Only shown on link success, errors returning a link show in notification
+ * 
+ * Active -> If the component should be shown
+ * Message -> Title
+ * Type -> Link of returned short url
+ */
+const LINK_SUCCESS = {
+        active: false,
+        title: '',
+        linkHref: '',
 }
 
 const state = {
         notice: NOTIFICATION_HEADER,
         userId: GetUID(),
+        linkSuccess: LINK_SUCCESS,
 };
 
 const store =  new Vuex.Store({

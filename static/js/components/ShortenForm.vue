@@ -12,18 +12,23 @@
         display: flex;
         justify-content: space-between;
         
-        & > .shorten-form-url{
+        & > input{
             width: 100%;
-            max-width: 500px;
             height: 100%;
-            padding: 0px 10px;
             border: none;
-            background-color: rgba(255,255,255,0.8);
-            box-shadow: $elm-shadow;
+            outline: 0px;
             transition: background-color 0.2s ease-in-out;
             
             font-family: $pt-sans;
             @include fontSize(18px);
+        }
+        
+        & > .shorten-form-url{
+            max-width: 500px;
+            height: 100%;
+            padding: 0px 10px;
+            background-color: rgba(255,255,255,0.8);
+            box-shadow: $elm-shadow;
             color: $grey-text;
             
             &:focus{
@@ -32,17 +37,10 @@
         }
         
         & > .shorten-form-submit{
-            width: 100%;
             max-width: 130px;
-            height: 100%;
-            border: none;
             background-color: #fff;
             box-shadow: $elm-shadow;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
-            
-            font-family: $pt-sans;
-            @include fontSize(18px);
             color: $teal-text;
             
             /* Remove the dotted line FireFox */
@@ -83,9 +81,13 @@
                         userid: this.$store.state.userId,
                         date: ~~(Date.now() / 1000),
                     };
+                    store.dispatch('showLinkSuccess', {
+                        title: 'Your short link: ',
+                        linkHref: 'https://tny.al/H20D_3',
+                    });
                 } catch(e){
                     // Only show the error if it's not already visible
-                    if(!this.$store.state.notice.show){
+                    if(!this.$store.state.notice.active){
                         store.dispatch('showNotice', {
                             message: e.message,
                             type: 'error',
@@ -93,7 +95,7 @@
                         
                         setTimeout(() =>{
                             // Only fire if it is still showing
-                            if(this.$store.state.notice.show)
+                            if(this.$store.state.notice.active)
                                 store.dispatch('hideNotice');
                         }, 5000);
                     }
