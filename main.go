@@ -33,6 +33,7 @@ func main() {
 
 	// Handles all API routes
 	apiRoute := router.NewGroup("/api")
+	apiRoute.GET("/uid", api.GetUid)
 	apiRoute.POST("/add", api.Add)
 
 	// Handles all Admin routes

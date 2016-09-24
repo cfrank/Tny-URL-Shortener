@@ -29,6 +29,7 @@ _testmain.go
 # Project specific ignores
 logs/
 tny.al
+utils/secret.go
 static/js/out
 static/css/out
 static/node_modules/

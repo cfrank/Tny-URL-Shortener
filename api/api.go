@@ -11,6 +11,7 @@ package api
 
 import (
 	"encoding/json"
+	"github.com/cfrank/tny.al/utils"
 	"net/http"
 	"time"
 )
@@ -26,12 +27,30 @@ type Link struct {
 }
 
 type Test struct {
-	Url string
+	Url string `json:"url"`
 }
 
+/*
+ * Generates a UID
+ *
+ * Creates a UID hashed with a secret key to make sure it isn't
+ * tampered with.
+ */
+func GetUid(w http.ResponseWriter, req *http.Request, params map[string]string) {
+	var id *utils.Uid = utils.CreateId(10)
+	json.NewEncoder(w).Encode(id)
+}
+
+/*
+ * Shortens a Link
+ *
+ * This is the function which will take the request to shorten a Link
+ * from the user. And Return a shortened link on success and an error
+ * when something goes wrong
+ */
 func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	var newTest Test
-	if req.Body == nil {
+	if req.Body != nil {
 		err := &APIError{
 			Msg:        "Nothing was sent in the body!",
 			Httpstatus: http.StatusBadRequest,
