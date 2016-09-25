@@ -37,6 +37,7 @@ type Test struct {
  * tampered with.
  */
 func GetUid(w http.ResponseWriter, req *http.Request, params map[string]string) {
+	w.Header().Set("Content-Type", "application/json")
 	var id *utils.Uid = utils.CreateId(10)
 	json.NewEncoder(w).Encode(id)
 }

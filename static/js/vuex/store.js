@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import {GetUID} from '../filters/';
 import * as getters from './getters';
 import * as actions from './actions';
 import mutations from './mutations';
@@ -39,7 +38,6 @@ const LINK_SUCCESS = {
 
 const state = {
         notice: NOTIFICATION_HEADER,
-        userId: GetUID(),
         linkSuccess: LINK_SUCCESS,
 };
 
@@ -49,7 +47,5 @@ const store =  new Vuex.Store({
         mutations,
         state,
 });
-
-console.log(state.userId);
 
 export default store;

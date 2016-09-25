@@ -1,6 +1,5 @@
 import * as Constants from './constants.js';
-import InvalidLinkError from './ErrorClass.js';
-import Store from '../vuex/store';
+import {InvalidLinkError, GeneralError} from './ErrorClass.js';
 
 /*
  * Parse and validate the url
@@ -62,37 +61,17 @@ export function ValidateUrl(input, recursive = false){
 }
 
 /*
- * Generate a key
+ * Fetch json data from specified href argument
  * 
- * @param int length
- * @return string
+ * @returns Promise|Error
+ * 
  */
-function generateKey(length){
-        let key = '';
-        for(let i = 0; i < length; ++i){
-                key += Constants.KEYSPACE[~~(Math.random() * (Constants.KEYSPACE.length))];
-        }
-        return key;
-}
-
-/*
- * Return a UID for a user
- * 
- * This will return a UID for a user either by finding the currently
- * set UID, or generating a new one
- * 
- * @retuns string|error
- */
-export function GetUID(){
-        if(window.localStorage.getItem(Constants.USERID_LOCALHOST) !== null){
-                // Get already existing uid
-                return window.localStorage.getItem(Constants.USERID_LOCALHOST);
-        }
-        else{
-                // Generate new uid
-                let key = generateKey(Constants.UID_LEN);
-                // Set the key in localStorage
-                window.localStorage.setItem(Constants.USERID_LOCALHOST, key);
-                return key;
-        }
+export function CallFetchJson(url){
+        return fetch(url).then(function(response){
+                return response.json();
+        }).then(function(json){
+                return json;
+        }).catch(function(error){
+                throw new GeneralError(error.message);
+        });
 }

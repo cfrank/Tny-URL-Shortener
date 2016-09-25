@@ -31,6 +31,8 @@
 </style>
 
 <script>
+    import {CallFetchJson} from './filters/';
+    import * as Constants from './filters/constants';
     import NoticeHeader from './components/NoticeHeader.vue';
     
     export default{
@@ -39,5 +41,21 @@
         components:{
             NoticeHeader
         },
+        
+        created: function(){
+            if(window.localStorage.getItem(Constants.USERID_LOCALSTORAGE) === null
+            || window.localStorage.getItem(Constants.USERID_KEY_LOCALSTORAGE) === null){
+                // Uid not set
+                try{
+                    CallFetchJson('/api/uid').then(function(json){
+                        window.localStorage.setItem(Constants.USERID_LOCALSTORAGE, json.uid);
+                        window.localStorage.setItem(Constants.USERID_KEY_LOCALSTORAGE, json.key);
+                    });
+                }catch(e){
+                    // There was a problem recieving the uid data
+                    console.log(e);
+                }
+            }
+        }
     }
 </script>

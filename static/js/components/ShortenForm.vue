@@ -57,7 +57,8 @@
 
 <script>
     import store from '../vuex/store';
-    import {ValidateUrl} from '../filters/index.js';
+    import * as Constants from '../filters/constants';
+    import {ValidateUrl} from '../filters/index';
     
     export default{
         name: 'shorten-form',
@@ -78,7 +79,8 @@
                     // Create the object which will be sent to the db
                     let linkData = {
                         encodedUrl: ValidateUrl(this.value),
-                        userid: this.$store.state.userId,
+                        userid: window.localStorage.getItem(Constants.USERID_LOCALSTORAGE),
+                        key: window.localStorage.getItem(Constants.USERID_KEY_LOCALSTORAGE),
                         date: ~~(Date.now() / 1000),
                     };
                     store.dispatch('showLinkSuccess', {

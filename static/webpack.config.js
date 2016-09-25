@@ -23,7 +23,7 @@ else{
 }
 
 module.exports = {
-        entry: entry,
+        entry: ['babel-polyfill', 'whatwg-fetch', entry],
         
         resolve: {
                 alias:{

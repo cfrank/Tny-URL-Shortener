@@ -1,4 +1,4 @@
-class GeneralError extends Error{
+export class GeneralError extends Error{
         constructor(message){
                 super(message);
                 this.name = this.constructor.name;
@@ -12,7 +12,7 @@ class GeneralError extends Error{
         }
 }
 
-export default class InvalidLinkError extends GeneralError{
+export class InvalidLinkError extends GeneralError{
         constructor(message){
                 super(message);
         }
