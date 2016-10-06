@@ -64,7 +64,6 @@ export function ValidateUrl(input, recursive = false){
  * Fetch json data from specified href argument
  * 
  * @returns Promise|Error
- * 
  */
 export function CallFetchJson(url){
         return fetch(url).then(function(response){

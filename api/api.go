@@ -11,9 +11,11 @@ package api
 
 import (
 	"encoding/json"
-	"github.com/cfrank/tny.al/utils"
 	"net/http"
 	"time"
+
+	//"github.com/cfrank/tny.al/database"
+	"github.com/cfrank/tny.al/utils"
 )
 
 type Link struct {
@@ -37,9 +39,18 @@ type Test struct {
  * tampered with.
  */
 func GetUid(w http.ResponseWriter, req *http.Request, params map[string]string) {
+	uid, err := utils.CreateId(10)
+	// Most likely the server couldn't find a UserId
+	if err != nil {
+		uidError := &APIError{
+			Msg:        err.Error(),
+			Httpstatus: http.StatusInternalServerError,
+		}
+		uidError.NewApiError(&w)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
-	var id *utils.Uid = utils.CreateId(10)
-	json.NewEncoder(w).Encode(id)
+	json.NewEncoder(w).Encode(uid)
 }
 
 /*

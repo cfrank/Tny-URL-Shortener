@@ -17,6 +17,7 @@ import (
 
 	"github.com/cfrank/tny.al/admin"
 	"github.com/cfrank/tny.al/api"
+	"github.com/cfrank/tny.al/database"
 	"github.com/cfrank/tny.al/shortlink"
 )
 
@@ -39,6 +40,15 @@ func main() {
 	// Handles all Admin routes
 	adminRoute := router.NewGroup("/admin")
 	adminRoute.GET("/:task", admin.Handle)
+
+	// Open a connection to the database
+	databaseError := database.OpenDatabase()
+	if databaseError != nil && database.MyDb.Alive {
+		log.Fatal("Error: Problem establishing database connection!")
+	}
+
+	// Defer closing the database until when the server drops
+	defer database.CloseDatabase()
 
 	// Serve
 	log.Fatal(http.ListenAndServe(PORT, router))

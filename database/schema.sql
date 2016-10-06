@@ -19,3 +19,12 @@ CREATE TABLE `link` (
         `expires` DATETIME DEFAULT NULL,
         PRIMARY KEY (`linkid`)
 )ENGINE=INNODB
+
+--
+-- Table structure for table `userid`
+--
+
+CREATE TABLE `user` (
+        `userid` CHAR(10) NOT NULL,
+        PRIMARY KEY (`userid`)
+)ENGINE=INNODB

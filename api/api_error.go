@@ -11,5 +11,6 @@ type APIError struct {
 }
 
 func (err *APIError) NewApiError(w *http.ResponseWriter) {
+	(*w).Header().Set("Content-Type", "application/json")
 	json.NewEncoder(*w).Encode(err)
 }
