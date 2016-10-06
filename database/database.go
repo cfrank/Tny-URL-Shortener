@@ -57,7 +57,7 @@ func CloseDatabase() {
  */
 func UniqueIdCheck(id string) bool {
 	var userid string
-	err := MyDb.Db.QueryRow("Select userid from user where userid =?", id).Scan(&userid)
+	err := MyDb.Db.QueryRow("SELECT userid FROM user WHERE userid =?", id).Scan(&userid)
 	switch {
 	case err == sql.ErrNoRows:
 		return true
@@ -66,4 +66,26 @@ func UniqueIdCheck(id string) bool {
 	default:
 		return false
 	}
+}
+
+/*
+ * Save a userid to the database
+ *
+ * The id being sent can be assumed to be unique since
+ * it is only sent after checking
+ */
+func SaveUserid(id string) bool {
+	stmt, stmtError := MyDb.Db.Prepare("INSERT INTO user(userid) VALUE(?)")
+	defer stmt.Close()
+
+	if stmtError != nil {
+		return false
+	}
+	_, resultError := stmt.Exec(id)
+
+	if resultError != nil {
+		return false
+	}
+
+	return true
 }
