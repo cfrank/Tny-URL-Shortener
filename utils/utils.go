@@ -33,23 +33,43 @@ func CheckHmac(hmac string, uid []byte) bool {
 	}
 }
 
-// Generate a random string of provided length for use as
-// a UserId
-func generateUserId(length int) ([]byte, bool) {
+func generateId(length int) []byte {
 	const keyspace = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_"
 
 	// Seed the random generator
 	rand.Seed(time.Now().UnixNano())
 
-	// Try MAX_TRIES times to find a user id
-	// Throw an error if it's not possible
-	for i := 0; i < constants.MAX_TRIES; i++ {
-		id := make([]byte, length)
-		for i := range id {
-			id[i] = keyspace[rand.Int63()%int64(len(keyspace))]
-		}
+	id := make([]byte, length)
+	for i := range id {
+		id[i] = keyspace[rand.Int63()%int64(len(keyspace))]
+	}
 
-		if database.UniqueIdCheck(string(id)) {
+	return id
+}
+
+// Generate a random string of provided length for use as
+// a UserId
+func generateUserId(length int) ([]byte, bool) {
+	// Try MAX_TRIES times to find a user id
+	// Return false if one can't be found
+	for i := 0; i < constants.MAX_TRIES; i++ {
+		id := generateId(length)
+		if database.UniqueUserIdCheck(string(id)) {
+			return id, true
+		}
+	}
+
+	return nil, false
+}
+
+// Generate a random string of provided length for use as
+// a LinkId
+func GenerateLinkId(length int) ([]byte, bool) {
+	// Try MAX_TRIES times to find a link id
+	// Return false if one can't be found
+	for i := 0; i < constants.MAX_TRIES; i++ {
+		id := generateId(length)
+		if database.UniqueLinkIdCheck(string(id)) {
 			return id, true
 		}
 	}
@@ -59,9 +79,8 @@ func generateUserId(length int) ([]byte, bool) {
 
 // Generate a Uid and with a secure key to provide assurance that it
 // is correct
-func CreateId(length int) (uid *Uid, err error) {
-	// Try 5 times to find a available userid that has not been
-	// taken already, if one can't be found return an error
+func CreateId(length int) (*Uid, error) {
+	// Generate a user id
 	id, succeeded := generateUserId(length)
 	if succeeded != true {
 		return nil, errors.New("Failed to find an unused UserId!")

@@ -14,6 +14,8 @@ import (
 	"github.com/idawes/httptreemux"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
 
 	"github.com/cfrank/tny.al/admin"
 	"github.com/cfrank/tny.al/api"
@@ -47,8 +49,17 @@ func main() {
 		log.Fatal("Error: Problem establishing database connection!")
 	}
 
-	// Defer closing the database until when the server drops
+	// Close the database when the server drops
 	defer database.CloseDatabase()
+
+	// Catch SIGTERM and close the database
+	termChan := make(chan os.Signal, 1)
+	signal.Notify(termChan, os.Interrupt)
+	go func() {
+		<-termChan
+		database.CloseDatabase()
+		os.Exit(1)
+	}()
 
 	// Serve
 	log.Fatal(http.ListenAndServe(PORT, router))

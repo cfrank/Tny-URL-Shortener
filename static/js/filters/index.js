@@ -68,8 +68,25 @@ export function ValidateUrl(input, recursive = false){
 export function CallFetchJson(url){
         return fetch(url).then(function(response){
                 return response.json();
-        }).then(function(json){
-                return json;
+        }).catch(function(error){
+                throw new GeneralError(error.message);
+        });
+}
+
+/*
+ * Send json as POST request to provided url
+ */
+export function JsonPostRequest(url, data){
+        return fetch(url,
+        {
+                headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify(data)
+        }).then(function(response){
+                return response.json();
         }).catch(function(error){
                 throw new GeneralError(error.message);
         });

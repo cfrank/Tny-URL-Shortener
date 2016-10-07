@@ -8,8 +8,10 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/cfrank/tny.al/constants"
+	"github.com/cfrank/tny.al/link"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -46,6 +48,7 @@ func OpenDatabase() error {
 }
 
 func CloseDatabase() {
+	fmt.Printf("Closing database connection...")
 	MyDb.Db.Close()
 }
 
@@ -55,7 +58,7 @@ func CloseDatabase() {
  * This needs to be done because when a user visits the homepage
  * they are automatically given an id, and they must be unique
  */
-func UniqueIdCheck(id string) bool {
+func UniqueUserIdCheck(id string) bool {
 	var userid string
 	err := MyDb.Db.QueryRow("SELECT userid FROM user WHERE userid =?", id).Scan(&userid)
 	switch {
@@ -82,6 +85,49 @@ func SaveUserid(id string) bool {
 		return false
 	}
 	_, resultError := stmt.Exec(id)
+
+	if resultError != nil {
+		return false
+	}
+
+	return true
+}
+
+/*
+ * Check for unique link id
+ *
+ * Check to make sure that a generated link id is not already present
+ * in the database
+ */
+func UniqueLinkIdCheck(id string) bool {
+	var linkid string
+	err := MyDb.Db.QueryRow("SELECT linkid FROM link WHERE linkid =?", id).Scan(&linkid)
+	switch {
+	case err == sql.ErrNoRows:
+		return true
+	case err != nil:
+		return false
+	default:
+		return false
+	}
+}
+
+/*
+ * Save a link to the database
+ *
+ * Take a link struct from the api package and save it's contents
+ * to the database
+ */
+func SaveLink(link *link.Link) bool {
+	stmt, stmtError := MyDb.Db.Prepare(`INSERT INTO link(linkid, source,
+					created, userid) VALUES (?, ?, ?, ?)`)
+	defer stmt.Close()
+
+	if stmtError != nil {
+		return false
+	}
+
+	_, resultError := stmt.Exec(link.Linkid, link.Source, link.Created, link.Userid)
 
 	if resultError != nil {
 		return false

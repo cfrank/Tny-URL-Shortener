@@ -58,7 +58,7 @@
 <script>
     import store from '../vuex/store';
     import * as Constants from '../filters/constants';
-    import {ValidateUrl} from '../filters/index';
+    import {ValidateUrl, JsonPostRequest} from '../filters/index';
     
     export default{
         name: 'shorten-form',
@@ -78,14 +78,14 @@
                 try{
                     // Create the object which will be sent to the db
                     let linkData = {
-                        encodedUrl: ValidateUrl(this.value),
+                        source: ValidateUrl(this.value),
                         userid: window.localStorage.getItem(Constants.USERID_LOCALSTORAGE),
-                        key: window.localStorage.getItem(Constants.USERID_KEY_LOCALSTORAGE),
-                        date: ~~(Date.now() / 1000),
+                        userkey: window.localStorage.getItem(Constants.USERID_KEY_LOCALSTORAGE),
+                        created: ~~(Date.now() / 1000),
                     };
-                    store.dispatch('showLinkSuccess', {
-                        title: 'Your short link: ',
-                        linkHref: 'https://tny.al/H20D_3',
+                    
+                    JsonPostRequest('/api/add', linkData).then(function(json){
+                        console.log(json);
                     });
                 } catch(e){
                     // Only show the error if it's not already visible
