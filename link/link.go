@@ -31,15 +31,24 @@ func NewLink() *Link {
 func Unshorten(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	linkid := params["linkId"]
 
-	sourceUrl, err := database.GetSourceUrl(linkid)
-	if err != nil {
-		if err == sql.ErrNoRows {
+	sourceUrl, sourceUrlError := database.GetSourceUrl(linkid)
+	if sourceUrlError != nil {
+		if sourceUrlError == sql.ErrNoRows {
+			// There is no source url with this linkid
 			w.WriteHeader(http.StatusNotFound)
 			w.Write([]byte("Couldn't find a source url!"))
 			return
 		}
+		// There was some other error
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("Database problem"))
+		return
+	}
+
+	// Report the click for analytics
+	newClickError := database.ReportNewClick(linkid)
+	if newClickError != nil {
+		w.Write([]byte(newClickError.Error()))
 		return
 	}
 

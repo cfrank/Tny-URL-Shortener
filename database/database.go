@@ -150,3 +150,24 @@ func GetSourceUrl(linkid string) (string, error) {
 
 	return source, nil
 }
+
+/*
+ * Report clicking of a link to the database
+ *
+ * Incremement the clicks row of a specified linkid in the database
+ */
+func ReportNewClick(linkid string) error {
+	stmt, stmtError := MyDb.Db.Prepare(`UPDATE link SET clicks = clicks + 1 WHERE linkid =?`)
+
+	if stmtError != nil {
+		return stmtError
+	}
+
+	_, resultError := stmt.Exec(linkid)
+
+	if resultError != nil {
+		return resultError
+	}
+
+	return nil
+}
