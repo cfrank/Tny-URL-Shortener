@@ -9,3 +9,7 @@ export const linkSuccess = state => {
 export const notice = state => {
         return state.notice;
 }
+
+export const formValue = state => {
+        return state.formValue;
+}

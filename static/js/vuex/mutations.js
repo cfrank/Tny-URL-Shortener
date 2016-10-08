@@ -25,6 +25,10 @@ export default{
                 }
         },
         
+        UPDATE_FORM_VALUE(state, message){
+                state.formValue = message;
+        },
+        
         REMOVE_UID(state){
                 window.localStorage.removeItem(USERID_LOCALHOST);
                 state.userId = '';

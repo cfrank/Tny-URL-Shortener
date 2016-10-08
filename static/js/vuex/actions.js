@@ -21,3 +21,11 @@ export const showLinkSuccess = ({commit}, payload) => {
         
         commit('SHOW_LINK_SUCCESS', {active, title, linkHref});
 }
+
+export const hideLinkSuccess = ({commit}) => {
+        commit('HIDE_LINK_SUCCESS');
+}
+
+export const updateFormValue = ({commit}, payload) => {
+        commit('UPDATE_FORM_VALUE', payload);
+}

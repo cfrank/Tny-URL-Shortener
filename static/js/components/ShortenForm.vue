@@ -1,7 +1,7 @@
 <template>
     <form class="shorten-form" action="/" method="POST" @submit.prevent="submit">
-        <input type="text" class="shorten-form-url" :placeholder="placeholder" v-model="value" />
-        <input type="submit" class="shorten-form-submit" value="Submit" />
+        <input type="text" class="shorten-form-url" :placeholder="placeholder" :value="formValue" @input="updateFormValue" />
+        <input type="submit" class="shorten-form-submit" :disabled="linkSuccess.active" value="Submit" />
     </form>
 </template>
 
@@ -42,10 +42,21 @@
             box-shadow: $elm-shadow;
             cursor: pointer;
             color: $teal-text;
+            transition: background-color 0.3s ease-out, color 0.3s ease-out;
             
             /* Remove the dotted line FireFox */
             &::-moz-focus-inner{
                 border: 0;
+            }
+            
+            &:disabled{
+                background-color: #f6f3f3;
+                color: #d5d7d8;
+                cursor: default;
+                
+                &:active{
+                    background-color: #f6f3f3;
+                }
             }
             
             &:active{
@@ -56,7 +67,7 @@
 </style>
 
 <script>
-    import store from '../vuex/store';
+    import { mapGetters } from 'vuex';
     import * as Constants from '../filters/constants';
     import {ValidateUrl, JsonPostRequest} from '../filters/index';
     import {NoticeUserError} from '../filters/ErrorClass.js';
@@ -66,12 +77,19 @@
         
         data(){
             return{
-                placeholder: 'Add your url here...',
-                value: ''
+                placeholder: 'Add your url here...'
             }
         },
         
+        computed: mapGetters(['linkSuccess', 'formValue']),
+        
         methods:{
+            /*
+             * Update the form value state
+            */
+            updateFormValue: function(event){
+                this.$store.dispatch('updateFormValue', event.target.value);
+            },
             /*
              * The submit method handles the submit event
              */
@@ -79,7 +97,7 @@
                 try{
                     // Create the object which will be sent to the db
                     let linkData = {
-                        source: ValidateUrl(this.value),
+                        source: ValidateUrl(this.$store.state.formValue),
                         userid: window.localStorage.getItem(Constants.USERID_LOCALSTORAGE),
                         userkey: window.localStorage.getItem(Constants.USERID_KEY_LOCALSTORAGE),
                         created: ~~(Date.now() / 1000),
@@ -93,7 +111,7 @@
                         }else{
                             this.$store.dispatch('showLinkSuccess', {
                                 title: 'Your short link: ',
-                                linkHref: `https://tny.build/${json.linkid}`,
+                                linkHref: `${Constants.HOST_NAME}${json.linkid}`,
                             });
                         }
                     }.bind(this));

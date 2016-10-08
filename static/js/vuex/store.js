@@ -39,6 +39,7 @@ const LINK_SUCCESS = {
 const state = {
         notice: NOTIFICATION_HEADER,
         linkSuccess: LINK_SUCCESS,
+        formValue: ''
 };
 
 const store =  new Vuex.Store({
