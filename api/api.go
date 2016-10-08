@@ -102,7 +102,7 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	shortLink.Linkid = string(linkId)
 
 	// Save the Link to the database
-	savedLink := database.SaveLink(shortLink)
+	savedLink := database.SaveLink(shortLink.Linkid, shortLink.Source, shortLink.Created, shortLink.Userid)
 	if savedLink != true {
 		err := &APIError{
 			Msg:        "Unable to save link to database",

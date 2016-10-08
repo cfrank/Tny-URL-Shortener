@@ -11,7 +11,6 @@ import (
 	"fmt"
 
 	"github.com/cfrank/tny.al/constants"
-	"github.com/cfrank/tny.al/link"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -117,7 +116,7 @@ func UniqueLinkIdCheck(id string) bool {
  *
  * Take a link struct and save it's contents to the database
  */
-func SaveLink(link *link.Link) bool {
+func SaveLink(linkid string, source string, created int64, userid string) bool {
 	stmt, stmtError := MyDb.Db.Prepare(`INSERT INTO link(linkid, source,
 					created, userid) VALUES (?, ?, ?, ?)`)
 	defer stmt.Close()
@@ -126,11 +125,28 @@ func SaveLink(link *link.Link) bool {
 		return false
 	}
 
-	_, resultError := stmt.Exec(link.Linkid, link.Source, link.Created, link.Userid)
+	_, resultError := stmt.Exec(linkid, source, created, userid)
 
 	if resultError != nil {
 		return false
 	}
 
 	return true
+}
+
+/*
+ * Get the source url of a link from the database
+ *
+ * Check if the linkid exists in the database, if it does retrieve
+ * the source url for that linkid
+ */
+func GetSourceUrl(linkid string) (string, error) {
+	var source string
+	err := MyDb.Db.QueryRow("SELECT source FROM link WHERE linkid =?", linkid).Scan(&source)
+
+	if err != nil {
+		return "", err
+	}
+
+	return source, nil
 }
