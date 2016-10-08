@@ -23,7 +23,7 @@
     }
     
     .viewport{
-        background-color: $bg-color;
+        background-color: $tny-blue;
         display: flex;
         justify-content: center;
         align-items: center;

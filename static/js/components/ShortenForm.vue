@@ -29,7 +29,7 @@
             padding: 0px 10px;
             background-color: rgba(255,255,255,0.8);
             box-shadow: $elm-shadow;
-            color: $grey-text;
+            color: $dark-text;
             
             &:focus{
                 background-color: #fff;
@@ -41,7 +41,7 @@
             background-color: #fff;
             box-shadow: $elm-shadow;
             cursor: pointer;
-            color: $teal-text;
+            color: $tny-blue;
             transition: background-color 0.3s ease-out, color 0.3s ease-out;
             
             /* Remove the dotted line FireFox */

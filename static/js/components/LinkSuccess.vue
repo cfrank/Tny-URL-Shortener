@@ -39,7 +39,7 @@
             color: $dark-text;
             
             & > a{
-                color: $teal-text;
+                color: $tny-blue;
                 text-decoration: none;
             }
         }
