@@ -20,7 +20,6 @@ import (
 	"github.com/cfrank/tny.al/admin"
 	"github.com/cfrank/tny.al/api"
 	"github.com/cfrank/tny.al/database"
-	"github.com/cfrank/tny.al/shortlink"
 )
 
 func main() {
@@ -32,7 +31,7 @@ func main() {
 	router := httptreemux.New()
 
 	// Handles all link requests
-	router.GET("/:linkId", shortlink.UnShorten)
+	//router.GET("/:linkId", shortlink.UnShorten)
 
 	// Handles all API routes
 	apiRoute := router.NewGroup("/api")

@@ -115,8 +115,7 @@ func UniqueLinkIdCheck(id string) bool {
 /*
  * Save a link to the database
  *
- * Take a link struct from the api package and save it's contents
- * to the database
+ * Take a link struct and save it's contents to the database
  */
 func SaveLink(link *link.Link) bool {
 	stmt, stmtError := MyDb.Db.Prepare(`INSERT INTO link(linkid, source,

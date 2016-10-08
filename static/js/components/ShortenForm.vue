@@ -59,6 +59,7 @@
     import store from '../vuex/store';
     import * as Constants from '../filters/constants';
     import {ValidateUrl, JsonPostRequest} from '../filters/index';
+    import {NoticeUserError} from '../filters/ErrorClass.js';
     
     export default{
         name: 'shorten-form',
@@ -85,22 +86,20 @@
                     };
                     
                     JsonPostRequest('/api/add', linkData).then(function(json){
-                        console.log(json);
-                    });
+                        // There was an error with the request
+                        if(json.code !== 200){
+                            const apiError = new NoticeUserError(json.message, this.$store);
+                            apiError.show();
+                        }else{
+                            this.$store.dispatch('showLinkSuccess', {
+                                title: 'Your short link: ',
+                                linkHref: `https://tny.build/${json.linkid}`,
+                            });
+                        }
+                    }.bind(this));
                 } catch(e){
-                    // Only show the error if it's not already visible
-                    if(!this.$store.state.notice.active){
-                        store.dispatch('showNotice', {
-                            message: e.message,
-                            type: 'error',
-                        });
-                        
-                        setTimeout(() =>{
-                            // Only fire if it is still showing
-                            if(this.$store.state.notice.active)
-                                store.dispatch('hideNotice');
-                        }, 5000);
-                    }
+                    const linkError = new NoticeUserError(e.message, this.$store);
+                    linkError.show();
                 }
             }
         }

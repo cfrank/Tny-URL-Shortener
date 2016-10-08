@@ -17,3 +17,26 @@ export class InvalidLinkError extends GeneralError{
                 super(message);
         }
 }
+
+export class NoticeUserError{
+        constructor(message, store){
+                this.message = message;
+                this.store = store;
+        }
+        
+        show(){
+                // Only show the error if it's not already visible
+                if(!this.store.state.notice.active){
+                        this.store.dispatch('showNotice', {
+                                message: this.message,
+                                type: 'error',
+                        });
+                        
+                        setTimeout(() =>{
+                                // Only fire if it is still showing
+                                if(this.store.state.notice.active)
+                                this.store.dispatch('hideNotice');
+                        }, 5000);
+                }
+        }
+}

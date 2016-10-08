@@ -19,9 +19,9 @@ import (
 )
 
 type linkEndPoint struct {
-	Linkid  string `json:"linkid"`
-	Created int64  `json:"created"`
-	Success bool   `json:"success"`
+	Linkid     string `json:"linkid"`
+	Created    int64  `json:"created"`
+	Httpstatus int    `json:"code"`
 }
 
 /*
@@ -114,9 +114,9 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 
 	// Return the linkid to the user
 	var endpoint linkEndPoint = linkEndPoint{
-		Linkid:  shortLink.Linkid,
-		Created: shortLink.Created,
-		Success: true,
+		Linkid:     shortLink.Linkid,
+		Created:    shortLink.Created,
+		Httpstatus: http.StatusOK,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
