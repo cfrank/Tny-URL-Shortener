@@ -1,5 +1,5 @@
 import * as Constants from './constants.js';
-import {InvalidLinkError, GeneralError} from './ErrorClass.js';
+import {InvalidLinkError, NoticeUserError, GeneralError} from './ErrorClass.js';
 
 /*
  * Parse and validate the url
@@ -11,36 +11,29 @@ import {InvalidLinkError, GeneralError} from './ErrorClass.js';
  * All urls are returned URIEncoded
  * 
  * @param String input
- * @param Bool recursive
  * 
- * @returns String|Error 
+ * @returns String|Error
  */
-export function ValidateUrl(input, recursive = false){
+export function ValidateUrl(input){
         let parser = document.createElement('a');
         parser.href = input;
         
-        const puncRegex = /[,.?\-]/;
+        const puncRegex = /[,.?\-*$%^&()]/;
         const relativeHostname = location.hostname;
+        const defaultProto = 'http://';
+        
+        // Make sure url is absolute
+        if(parser.hostname === relativeHostname)
+                parser.href = `${defaultProto}${input}`;
         
         let href = parser.href;
         let proto = parser.protocol;
         let hostname = parser.hostname;
-        let returnedURL;
-        
-        if(recursive && relativeHostname === hostname){
-                throw new InvalidLinkError("Don't Shorten my urls");
-        }
+        let tld = hostname.split('.').pop();
         
         /* Make sure there is a valid protocol and it's not too long' */
         if(proto.length > 0 && hostname.length > 0 && hostname.length < (126)
           && href.length < 2083){
-                /* Make sure url is absolute and not relative */
-                if(relativeHostname === hostname){
-                        /* Add http and recursivly check if valid */
-                        let absHostname = `${href.replace(relativeHostname + '/', '')}`;
-                        return ValidateUrl(absHostname, true);
-                }
-                
                 /* Hostnames cant start with a punctuation */
                 if(puncRegex.test(hostname.replace('www.','').charAt(0))){
                         throw new InvalidLinkError("Links cant start with punctuation");
@@ -50,12 +43,17 @@ export function ValidateUrl(input, recursive = false){
                 if(hostname.indexOf('.') === -1){
                         throw new InvalidLinkError("The link contains an error");
                 }
+                
+                /* TLD checks */
+                if(tld === null || tld.length < 2 || tld.length > 64 || puncRegex.test(tld)){
+                        throw new InvalidLinkError("The link has an invalid TLD");
+                }
         }
         else{
                 throw new InvalidLinkError("Link is of incorrect length");
         }
         
-        returnedURL = href;
+        let returnedURL = href;
         parser = null;
         return returnedURL;
 }
@@ -69,7 +67,9 @@ export function CallFetchJson(url){
         return fetch(url).then(function(response){
                 return response.json();
         }).catch(function(error){
-                throw new GeneralError(error.message);
+                const fetchError = new NoticeUserError("ERROR: Could not fetch data from server!", false);
+                fetchError.show();
+                return false;
         });
 }
 
@@ -88,6 +88,8 @@ export function JsonPostRequest(url, data){
         }).then(function(response){
                 return response.json();
         }).catch(function(error){
-                throw new GeneralError(error.message);
+                const postError = new NoticeUserError("ERROR: Can't connect to the server!", false);
+                postError.show();
+                return false;
         });
 }

@@ -1,3 +1,5 @@
+import store from '../vuex/store';
+
 export class GeneralError extends Error{
         constructor(message){
                 super(message);
@@ -19,24 +21,26 @@ export class InvalidLinkError extends GeneralError{
 }
 
 export class NoticeUserError{
-        constructor(message, store){
+        constructor(message, hide){
                 this.message = message;
-                this.store = store;
+                this.hide = hide;
         }
         
         show(){
                 // Only show the error if it's not already visible
-                if(!this.store.state.notice.active){
-                        this.store.dispatch('showNotice', {
+                if(!store.state.notice.active){
+                        store.dispatch('showNotice', {
                                 message: this.message,
                                 type: 'error',
                         });
                         
-                        setTimeout(() =>{
-                                // Only fire if it is still showing
-                                if(this.store.state.notice.active)
-                                this.store.dispatch('hideNotice');
-                        }, 5000);
+                        if(this.hide){
+                                setTimeout(() =>{
+                                        // Only fire if it is still showing
+                                        if(store.state.notice.active)
+                                                store.dispatch('hideNotice');
+                                }, 5000);
+                        }
                 }
         }
 }

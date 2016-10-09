@@ -103,20 +103,23 @@
                         created: ~~(Date.now() / 1000),
                     };
                     
-                    JsonPostRequest('/api/add', linkData).then(function(json){
+                    JsonPostRequest('/api/add', linkData).then(function(response){
                         // There was an error with the request
-                        if(json.code !== 200){
-                            const apiError = new NoticeUserError(json.message, this.$store);
-                            apiError.show();
-                        }else{
-                            this.$store.dispatch('showLinkSuccess', {
-                                title: 'Your short link: ',
-                                linkHref: `${Constants.HOST_NAME}${json.linkid}`,
-                            });
+                        if(response !== false){
+                            // Json was recieved check if it is valid
+                            if(response.code !== 200){
+                                const apiError = new NoticeUserError(response.message, true);
+                                apiError.show();
+                            }else{
+                                this.$store.dispatch('showLinkSuccess', {
+                                    title: 'Your short link: ',
+                                    linkHref: `${Constants.HOST_NAME}${response.linkid}`,
+                                });
+                            }
                         }
                     }.bind(this));
                 } catch(e){
-                    const linkError = new NoticeUserError(e.message, this.$store);
+                    const linkError = new NoticeUserError(e.message, true);
                     linkError.show();
                 }
             }

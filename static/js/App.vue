@@ -47,9 +47,11 @@
             || window.localStorage.getItem(Constants.USERID_KEY_LOCALSTORAGE) === null){
                 // Uid not set
                 try{
-                    CallFetchJson('/api/uid').then(function(json){
-                        window.localStorage.setItem(Constants.USERID_LOCALSTORAGE, json.uid);
-                        window.localStorage.setItem(Constants.USERID_KEY_LOCALSTORAGE, json.key);
+                    CallFetchJson('/api/uid').then(function(response){
+                        if(response !== false){
+                            window.localStorage.setItem(Constants.USERID_LOCALSTORAGE, response.uid);
+                            window.localStorage.setItem(Constants.USERID_KEY_LOCALSTORAGE, response.key);
+                        }
                     });
                 }catch(e){
                     // There was a problem recieving the uid data
