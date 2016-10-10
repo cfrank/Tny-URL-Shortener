@@ -6,6 +6,7 @@
         <!-- View component -->
         <router-view></router-view>
         <!-- Menu -->
+        <footer-menu></footer-menu>
     </div>
 </template>
 
@@ -34,12 +35,14 @@
     import {CallFetchJson} from './filters/';
     import * as Constants from './filters/constants';
     import NoticeHeader from './components/NoticeHeader.vue';
+    import FooterMenu from './components/FooterMenu.vue';
     
     export default{
         name: 'AppView',
         
         components:{
-            NoticeHeader
+            NoticeHeader,
+            FooterMenu
         },
         
         created: function(){

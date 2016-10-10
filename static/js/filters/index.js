@@ -18,7 +18,7 @@ export function ValidateUrl(input){
         let parser = document.createElement('a');
         parser.href = input;
         
-        const puncRegex = /[,.?\-*$%^&()]/;
+        const puncRegex = /[,.?\-*$%^&()_=+]/;
         const relativeHostname = location.hostname;
         const defaultProto = 'http://';
         
@@ -56,6 +56,22 @@ export function ValidateUrl(input){
         let returnedURL = href;
         parser = null;
         return returnedURL;
+}
+
+/*
+ * Validate a linkid
+ * 
+ * Make sure the linkid length is correct.
+ * TODO: add more checks
+ */
+export function ValidateLinkid(linkid){
+        if(linkid.length === 6){
+                // Correct length
+                return linkid;
+        }
+        else{
+                throw new GeneralError("Linkid is of incorrect length");
+        }
 }
 
 /*

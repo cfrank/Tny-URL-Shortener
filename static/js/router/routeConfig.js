@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import ShortenView from '../views/ShortenView.vue';
+import UnshortenView from '../views/UnshortenView.vue';
 
 Vue.use(VueRouter); // Expose Vuerouter to Vue
 
@@ -15,6 +16,10 @@ const configRoutes = [
         {
                 path: '/',
                 component: ShortenView
+        },
+        {
+                path: '/pages/unshorten',
+                component: UnshortenView
         }
 ]
 
