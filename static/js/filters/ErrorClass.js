@@ -27,20 +27,21 @@ export class NoticeUserError{
         }
         
         show(){
-                // Only show the error if it's not already visible
-                if(!store.state.notice.active){
-                        store.dispatch('showNotice', {
-                                message: this.message,
-                                type: 'error',
-                        });
-                        
-                        if(this.hide){
-                                setTimeout(() =>{
-                                        // Only fire if it is still showing
-                                        if(store.state.notice.active)
-                                                store.dispatch('hideNotice');
-                                }, 5000);
-                        }
+                // If there is an active notice, close it first
+                if(store.state.notice.active){
+                        store.dispatch('hideNotice');
+                }
+                store.dispatch('showNotice', {
+                        message: this.message,
+                        type: 'error',
+                });
+                
+                if(this.hide){
+                        setTimeout(() =>{
+                                // Only fire if it is still showing
+                                if(store.state.notice.active)
+                                        store.dispatch('hideNotice');
+                        }, 5000);
                 }
         }
 }

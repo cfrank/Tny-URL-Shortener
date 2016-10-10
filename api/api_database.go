@@ -45,7 +45,7 @@ func GetLinkData(linkid string, linkData *exposedLink) error {
 	if queryError != nil {
 		switch {
 		case queryError == sql.ErrNoRows:
-			return errors.New("There were no links with the provided linkid")
+			return errors.New("There were no links with that linkid")
 		default:
 			return queryError
 		}

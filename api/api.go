@@ -24,7 +24,7 @@ type linkEndPoint struct {
 }
 
 type exposedLink struct {
-	Source     string `json:"linkid"`
+	Source     string `json:"source"`
 	Created    int64  `json:"created"`
 	Abuseflags uint16 `json:"flags"`
 	Httpstatus int    `json:"code"`
@@ -139,7 +139,7 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
  */
 func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	var linkid string
-	var linkInfo *exposedLink = &exposedLink{}
+	var linkInfo exposedLink = exposedLink{}
 
 	if req.Body == nil {
 		err := &APIError{
@@ -161,7 +161,7 @@ func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 		return
 	}
 
-	linkInfoError := GetLinkData(linkid, linkInfo)
+	linkInfoError := GetLinkData(linkid, &linkInfo)
 
 	if linkInfoError != nil {
 		err := &APIError{

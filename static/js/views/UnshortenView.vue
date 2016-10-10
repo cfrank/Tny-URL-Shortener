@@ -12,7 +12,8 @@
                 removed. Thanks!
             </p>
         </section>
-        <unshorten-form></unshorten-form>
+        <linkid-form :submit="submit"></linkid-form>
+        <link-expose :data="linkData" :show="dataAvailable"></link-expose>
         <span class="unshorten-instructions">Enter a linkid and press enter</span>
     </div>
 </template>
@@ -54,13 +55,48 @@
 </style>
 
 <script>
-    import UnshortenForm from '../components/UnshortenForm.vue';
+    import LinkidForm from '../components/LinkidForm.vue';
+    import LinkExpose from '../components/LinkExpose.vue';
+    import {ValidateLinkid, JsonPostRequest} from '../filters/index';
+    import {NoticeUserError} from '../filters/ErrorClass';
     
     export default{
         name: 'unshorten-view',
     
         components:{
-            UnshortenForm
+            LinkidForm,
+            LinkExpose
+        },
+        
+        data(){
+            return{
+                dataAvailable: false,
+                linkData: {}
+            }
+        },
+        
+        methods:{
+            submit: function(event){
+                let linkid = event.target.elements[0].value;
+                // Validate the linkid
+                try{
+                    let formValue = ValidateLinkid(linkid);
+                    JsonPostRequest('/api/unshorten', formValue).then(function(response){
+                        if(response !== true){
+                            if(response.code !== 200){
+                                const apiError = new NoticeUserError(response.message, true);
+                                apiError.show();
+                            }else{
+                                this.linkData = response;
+                                this.dataAvailable = true;
+                            }
+                        }
+                    }.bind(this));
+                }catch(e){
+                    let linkidError = new NoticeUserError(e.message, true);
+                    linkidError.show();
+                }
+            }
         }
     }
 </script>
