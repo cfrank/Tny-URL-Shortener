@@ -112,29 +112,6 @@ func UniqueLinkIdCheck(id string) bool {
 }
 
 /*
- * Save a link to the database
- *
- * Take a link struct and save it's contents to the database
- */
-func SaveLink(linkid string, source string, created int64, userid string) bool {
-	stmt, stmtError := MyDb.Db.Prepare(`INSERT INTO link(linkid, source,
-					created, userid) VALUES (?, ?, ?, ?)`)
-	defer stmt.Close()
-
-	if stmtError != nil {
-		return false
-	}
-
-	_, resultError := stmt.Exec(linkid, source, created, userid)
-
-	if resultError != nil {
-		return false
-	}
-
-	return true
-}
-
-/*
  * Get the source url of a link from the database
  *
  * Check if the linkid exists in the database, if it does retrieve
@@ -158,6 +135,7 @@ func GetSourceUrl(linkid string) (string, error) {
  */
 func ReportNewClick(linkid string) error {
 	stmt, stmtError := MyDb.Db.Prepare(`UPDATE link SET clicks = clicks + 1 WHERE linkid =?`)
+	defer stmt.Close()
 
 	if stmtError != nil {
 		return stmtError

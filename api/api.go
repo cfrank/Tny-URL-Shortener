@@ -13,7 +13,6 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/cfrank/tny.al/database"
 	"github.com/cfrank/tny.al/link"
 	"github.com/cfrank/tny.al/utils"
 )
@@ -21,6 +20,13 @@ import (
 type linkEndPoint struct {
 	Linkid     string `json:"linkid"`
 	Created    int64  `json:"created"`
+	Httpstatus int    `json:"code"`
+}
+
+type exposedLink struct {
+	Source     string `json:"linkid"`
+	Created    int64  `json:"created"`
+	Abuseflags uint16 `json:"flags"`
 	Httpstatus int    `json:"code"`
 }
 
@@ -102,7 +108,7 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	shortLink.Linkid = string(linkId)
 
 	// Save the Link to the database
-	savedLink := database.SaveLink(shortLink.Linkid, shortLink.Source, shortLink.Created, shortLink.Userid)
+	savedLink := SaveLink(shortLink)
 	if savedLink != true {
 		err := &APIError{
 			Msg:        "Unable to save link to database",
@@ -121,4 +127,53 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(endpoint)
+}
+
+/*
+ * Expose a shortened link
+ *
+ * This function will expose a already shortened link and provide some
+ * information about it to the user. Including sourceurl, creation date
+ * and abuse report count. Everything will be returned as json for the
+ * frontend to deal with
+ */
+func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]string) {
+	var linkid string
+	var linkInfo *exposedLink = &exposedLink{}
+
+	if req.Body == nil {
+		err := &APIError{
+			Msg:        "Nothing sent in the body!",
+			Httpstatus: http.StatusBadRequest,
+		}
+		err.NewApiError(&w)
+		return
+	}
+
+	jsonError := json.NewDecoder(req.Body).Decode(&linkid)
+
+	if jsonError != nil {
+		err := &APIError{
+			Msg:        "Malformed JSON recieved",
+			Httpstatus: http.StatusBadRequest,
+		}
+		err.NewApiError(&w)
+		return
+	}
+
+	linkInfoError := GetLinkData(linkid, linkInfo)
+
+	if linkInfoError != nil {
+		err := &APIError{
+			Msg:        linkInfoError.Error(),
+			Httpstatus: http.StatusInternalServerError,
+		}
+		err.NewApiError(&w)
+		return
+	}
+
+	// There were no errors
+	linkInfo.Httpstatus = http.StatusOK
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(linkInfo)
 }

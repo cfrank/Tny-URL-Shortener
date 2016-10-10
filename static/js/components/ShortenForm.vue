@@ -113,7 +113,7 @@
                             }else{
                                 this.$store.dispatch('showLinkSuccess', {
                                     title: 'Your short link: ',
-                                    linkHref: `${Constants.HOST_NAME}${response.linkid}`,
+                                    linkHref: `${location.origin}/${response.linkid}`,
                                 });
                             }
                         }

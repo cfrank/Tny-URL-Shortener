@@ -46,6 +46,13 @@
     export default{
         name: 'unshorten-form',
         
+        data(){
+            return{
+                site_name: `${location.origin}/`,
+                value: ''
+            }
+        },
+        
         methods:{
             submit: function(){
                 // Validate the linkid
@@ -65,13 +72,6 @@
                     let linkidError = new NoticeUserError(e.message, true);
                     linkidError.show();
                 }
-            }
-        },
-        
-        data(){
-            return{
-                site_name: `${location.origin}/`,
-                value: ''
             }
         }
     }

@@ -83,7 +83,7 @@ export function CallFetchJson(url){
         return fetch(url).then(function(response){
                 return response.json();
         }).catch(function(error){
-                const fetchError = new NoticeUserError("ERROR: Could not fetch data from server!", false);
+                const fetchError = new NoticeUserError("ERROR: Could not fetch data from server! Please Reload", false);
                 fetchError.show();
                 return false;
         });
@@ -104,7 +104,7 @@ export function JsonPostRequest(url, data){
         }).then(function(response){
                 return response.json();
         }).catch(function(error){
-                const postError = new NoticeUserError("ERROR: Can't connect to the server!", false);
+                const postError = new NoticeUserError("ERROR: Can't connect to the server! Please Reload", false);
                 postError.show();
                 return false;
         });
