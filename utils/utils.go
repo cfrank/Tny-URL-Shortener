@@ -69,8 +69,13 @@ func GenerateLinkId(length int) ([]byte, bool) {
 	// Return false if one can't be found
 	for i := 0; i < constants.MAX_TRIES; i++ {
 		id := generateId(length)
-		if database.UniqueLinkIdCheck(string(id)) {
+		linkidExists, linkidError := database.LinkidExists(string(id))
+		if linkidExists == false && linkidError == nil {
+			// The id is available! use it
 			return id, true
+		} else if linkidError != nil {
+			// There was an error with the database
+			return nil, false
 		}
 	}
 

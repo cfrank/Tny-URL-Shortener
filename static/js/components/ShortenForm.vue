@@ -1,7 +1,7 @@
 <template>
     <form class="shorten-form" action="/" method="POST" @submit.prevent="submit">
         <input type="text" class="shorten-form-url" :placeholder="placeholder" :value="formValue" @input="updateFormValue" />
-        <input type="submit" class="shorten-form-submit" :disabled="linkSuccess.active" value="Submit" />
+        <input type="submit" class="shorten-form-submit" :disabled="linkSuccess.active" value="Shorten" />
     </form>
 </template>
 
@@ -60,6 +60,7 @@
             }
             
             &:active{
+                margin-top: 1px; 
                 background-color: #f0f0f0;
             }
         }

@@ -39,6 +39,7 @@ func main() {
 	apiRoute.GET("/uid", api.GetUid)
 	apiRoute.POST("/add", api.Add)
 	apiRoute.POST("/unshorten", api.ExposeLink)
+	apiRoute.POST("/report", api.ReportLink)
 
 	// Handles all Admin routes
 	adminRoute := router.NewGroup("/admin")

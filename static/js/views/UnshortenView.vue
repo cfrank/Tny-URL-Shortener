@@ -14,24 +14,9 @@
         </section>
         <linkid-form :submit="submit"></linkid-form>
         <link-expose :data="linkData" :show="dataAvailable"></link-expose>
-        <span class="unshorten-instructions">Enter a linkid and press enter</span>
+        <span class="linkid-instructions">Enter a linkid and press enter</span>
     </div>
 </template>
-
-<style lang="sass">
-    @import '../../css/header.scss';
-    .unshorten-view{
-        & > .unshorten-instructions{
-            width: 100%;
-            margin-top: 20px;
-            display: block;
-            font-family: $pt-sans;
-            @include fontSize(13px);
-            color: $grey-text;
-            text-align: center;
-        }
-    }
-</style>
 
 <script>
     import LinkidForm from '../components/LinkidForm.vue';
@@ -56,12 +41,12 @@
         
         methods:{
             submit: function(event){
-                let linkid = event.target.elements[0].value;
+                let formValue = event.target.elements[0].value;
                 // Validate the linkid
                 try{
-                    let formValue = ValidateLinkid(linkid);
-                    JsonPostRequest('/api/unshorten', formValue).then(function(response){
-                        if(response !== true){
+                    let linkid = ValidateLinkid(formValue);
+                    JsonPostRequest('/api/unshorten', linkid).then(function(response){
+                        if(response !== false){
                             if(response.code !== 200){
                                 const apiError = new NoticeUserError(response.message, true);
                                 apiError.show();
@@ -72,7 +57,7 @@
                         }
                     }.bind(this));
                 }catch(e){
-                    let linkidError = new NoticeUserError(e.message, true);
+                    const linkidError = new NoticeUserError(e.message, true);
                     linkidError.show();
                 }
             }

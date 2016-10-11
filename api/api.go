@@ -17,6 +17,11 @@ import (
 	"github.com/cfrank/tny.al/utils"
 )
 
+type apiSuccess struct {
+	Message    string `json:"message"`
+	Httpstatus int    `json:"code"`
+}
+
 type linkEndPoint struct {
 	Linkid     string `json:"linkid"`
 	Created    int64  `json:"created"`
@@ -176,4 +181,58 @@ func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 	linkInfo.Httpstatus = http.StatusOK
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(linkInfo)
+}
+
+/*
+ * Report a link
+ *
+ * This function will take a linkid and send it to the database so that
+ * it's 'abuseflags' variable can be increased. This will allow the admin
+ * to see links which have been flagged, and for action to be taken
+ */
+func ReportLink(w http.ResponseWriter, req *http.Request, params map[string]string) {
+	var linkid string
+
+	if req.Body == nil {
+		err := &APIError{
+			Msg:        "Nothing sent in the body!",
+			Httpstatus: http.StatusBadRequest,
+		}
+		err.NewApiError(&w)
+		return
+	}
+
+	jsonError := json.NewDecoder(req.Body).Decode(&linkid)
+
+	if jsonError != nil {
+		err := &APIError{
+			Msg:        "Malformed JSON recieved",
+			Httpstatus: http.StatusBadRequest,
+		}
+		err.NewApiError(&w)
+		return
+	}
+
+	reportError, internalError := FlagLink(linkid)
+
+	if reportError != nil {
+		err := &APIError{
+			Msg: reportError.Error(),
+		}
+		if internalError == true {
+			err.Httpstatus = http.StatusInternalServerError
+		} else {
+			err.Httpstatus = http.StatusBadRequest
+		}
+		err.NewApiError(&w)
+		return
+	}
+
+	success := &apiSuccess{
+		Message:    "Report was successful",
+		Httpstatus: http.StatusOK,
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(success)
 }

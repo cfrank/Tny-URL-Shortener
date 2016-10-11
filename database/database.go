@@ -98,16 +98,19 @@ func SaveUserid(id string) bool {
  * Check to make sure that a generated link id is not already present
  * in the database
  */
-func UniqueLinkIdCheck(id string) bool {
+func LinkidExists(id string) (bool, error) {
 	var linkid string
 	err := MyDb.Db.QueryRow("SELECT linkid FROM link WHERE linkid =?", id).Scan(&linkid)
 	switch {
 	case err == sql.ErrNoRows:
-		return true
+		// The linkid doesn't exist in the database
+		return false, nil
 	case err != nil:
-		return false
+		// There was an error
+		return false, err
 	default:
-		return false
+		// The linkid exists in the database
+		return true, nil
 	}
 }
 

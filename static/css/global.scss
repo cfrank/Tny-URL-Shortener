@@ -30,4 +30,14 @@ html,body{
             }
         }
     }
+    
+    & > .linkid-instructions{
+        width: 100%;
+        margin-top: 20px;
+        display: block;
+        font-family: $pt-sans;
+        @include fontSize(13px);
+        color: $grey-text;
+        text-align: center;
+    }
 }
