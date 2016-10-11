@@ -11,7 +11,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/idawes/httptreemux"
 	"log"
 	"net/http"
 	"os"
@@ -21,6 +20,7 @@ import (
 	"github.com/cfrank/tny.al/api"
 	"github.com/cfrank/tny.al/database"
 	"github.com/cfrank/tny.al/link"
+	"github.com/idawes/httptreemux"
 )
 
 func main() {

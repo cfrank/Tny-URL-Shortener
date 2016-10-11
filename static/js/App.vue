@@ -12,18 +12,10 @@
 
 <style lang="sass">
     @import '../css/header.scss';
-    *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+    @import '../css/global.scss';
     
-    html,body,
     .viewport{
         height: 100%;
-    }
-    
-    .viewport{
         background-color: $tny-blue;
         display: flex;
         justify-content: center;

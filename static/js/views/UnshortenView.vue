@@ -1,5 +1,5 @@
 <template>
-    <div class="unshorten-view">
+    <div class="unshorten-view interior-page">
         <section class="intro">
             <p>
                 Use this form to fetch the location of any url shortened with
@@ -21,27 +21,6 @@
 <style lang="sass">
     @import '../../css/header.scss';
     .unshorten-view{
-        width: 100%;
-        max-width: 650px;
-        padding: 25px;
-        background-color: #fff;
-        box-shadow: $elm-shadow;
-        
-        & > .intro{
-            margin-bottom: 25px;
-            
-            & > p{
-                font-family: $pt-sans;
-                color: $dark-text;
-                
-                & > a{
-                    font-weight: bold;
-                    text-decoration: none;
-                    color: $tny-blue;
-                }
-            }
-        }
-        
         & > .unshorten-instructions{
             width: 100%;
             margin-top: 20px;

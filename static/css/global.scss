@@ -1,0 +1,33 @@
+// Global Styles
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html,body{
+    height: 100%;
+}
+// Style for interior pages
+.interior-page{
+    width: 100%;
+    max-width: 650px;
+    padding: 25px;
+    background-color: #fff;
+    box-shadow: $elm-shadow;
+    
+    // Intro style for interior pages
+    & > .intro{
+        margin-bottom: 25px;
+        
+        & > p{
+            font-family: $pt-sans;
+            color: $dark-text;
+            
+            & > a{
+                font-weight: bold;
+                text-decoration: none;
+                color: $tny-blue;
+            }
+        }
+    }
+}
