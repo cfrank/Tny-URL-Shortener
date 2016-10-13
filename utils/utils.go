@@ -24,7 +24,7 @@ func ComputeHmac(message []byte) string {
 	return base64.StdEncoding.EncodeToString(hmac.Sum(nil))
 }
 
-func CheckHmac(hmac string, uid []byte) bool {
+func CheckHmac(uid []byte, hmac string) bool {
 	var valid string = ComputeHmac(uid)
 	if hmac == valid {
 		return true

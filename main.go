@@ -38,6 +38,7 @@ func main() {
 	apiRoute := router.NewGroup("/api")
 	apiRoute.GET("/uid", api.GetUid)
 	apiRoute.POST("/add", api.Add)
+	apiRoute.POST("/history", api.GetHistory)
 	apiRoute.POST("/unshorten", api.ExposeLink)
 	apiRoute.POST("/report", api.ReportLink)
 

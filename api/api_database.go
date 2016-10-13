@@ -31,6 +31,35 @@ func SaveLink(shortLink *link.Link) bool {
 }
 
 /*
+ * Get link data
+ *
+ * Get from the database a history of links shortened by a user
+ * based on the provided userid. Save the information to the link array
+ * pointer
+ */
+func getLinkHistory(user *userInfo, linkData *[]linkHisory) error {
+	rows, queryError := database.MyDb.Db.Query(`SELECT linkid, source, created, abuseflags, clicks FROM link WHERE userid =?`, user.Userid)
+
+	if queryError != nil {
+		return queryError
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var link linkHisory = linkHisory{}
+		scanError := rows.Scan(&link.Linkid, &link.Source, &link.Created, &link.Abuseflags, &link.Clicks)
+
+		if scanError != nil {
+			return scanError
+		}
+
+		// Add the link to the slice
+		*linkData = append(*linkData, link)
+	}
+	return nil
+}
+
+/*
  * Expose a shortened links data to a provided struct
  *
  * Take a linkid and a reference to a struct and return the data to that

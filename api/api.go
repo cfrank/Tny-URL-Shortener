@@ -22,6 +22,19 @@ type apiSuccess struct {
 	Httpstatus int    `json:"code"`
 }
 
+type userInfo struct {
+	Userid  string `json:"userid"`
+	Userkey string `json:"userkey"`
+}
+
+type linkHisory struct {
+	Linkid     string `json:"linkid"`
+	Source     string `json:"source"`
+	Created    int64  `json:"created"`
+	Abuseflags uint16 `json:"flags"`
+	Clicks     int    `json:"clicks"`
+	Httpstatus int    `json:"code"`
+}
 type linkEndPoint struct {
 	Linkid     string `json:"linkid"`
 	Created    int64  `json:"created"`
@@ -49,7 +62,7 @@ func GetUid(w http.ResponseWriter, req *http.Request, params map[string]string) 
 			Msg:        err.Error(),
 			Httpstatus: http.StatusInternalServerError,
 		}
-		uidError.NewApiError(&w)
+		uidError.NewApiError(w)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -71,7 +84,7 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 			Msg:        "Nothing was sent in the body!",
 			Httpstatus: http.StatusBadRequest,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -82,19 +95,19 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 			Msg:        "Malformed JSON recieved",
 			Httpstatus: http.StatusBadRequest,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
 	// Make sure that the userid and userkey are correct
-	validUserId := utils.CheckHmac(shortLink.Userkey, []byte(shortLink.Userid))
+	validUserId := utils.CheckHmac([]byte(shortLink.Userid), shortLink.Userkey)
 
 	if validUserId != true {
 		err := &APIError{
 			Msg:        "Invalid userid key pair recieved!",
 			Httpstatus: http.StatusUnauthorized,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -105,7 +118,7 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 			Msg:        "Unable to generate linkid",
 			Httpstatus: http.StatusInternalServerError,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -119,7 +132,7 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 			Msg:        "Unable to save link to database",
 			Httpstatus: http.StatusInternalServerError,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -132,6 +145,66 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(endpoint)
+}
+
+/*
+ * Get a users history
+ *
+ * This function takes a users userid and finds all links
+ * they have shortened on the service and returns it to them
+ * as json which the frontend will deal with
+ */
+func GetHistory(w http.ResponseWriter, req *http.Request, params map[string]string) {
+	var user userInfo
+	// Set up a slice to hold users links
+	var userLinks []linkHisory = []linkHisory{}
+
+	if req.Body == nil {
+		err := &APIError{
+			Msg:        "Nothing sent in the body!",
+			Httpstatus: http.StatusBadRequest,
+		}
+		err.NewApiError(w)
+		return
+	}
+
+	jsonError := json.NewDecoder(req.Body).Decode(&user)
+
+	if jsonError != nil {
+		err := &APIError{
+			Msg:        "Malformed JSON recieved",
+			Httpstatus: http.StatusBadRequest,
+		}
+		err.NewApiError(w)
+		return
+	}
+
+	// Check to make sure the userid is valid
+	validUserId := utils.CheckHmac([]byte(user.Userid), user.Userkey)
+
+	if validUserId != true {
+		err := &APIError{
+			Msg:        "Invalid userid key pair recieved",
+			Httpstatus: http.StatusUnauthorized,
+		}
+		err.NewApiError(w)
+		return
+	}
+
+	getHistoryError := getLinkHistory(&user, &userLinks)
+
+	if getHistoryError != nil {
+		err := &APIError{
+			Msg:        "Problem getting links from the database",
+			Httpstatus: http.StatusInternalServerError,
+		}
+		err.NewApiError(w)
+		return
+	}
+
+	// We have successfully obtained the links from this user
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(userLinks)
 }
 
 /*
@@ -151,7 +224,7 @@ func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 			Msg:        "Nothing sent in the body!",
 			Httpstatus: http.StatusBadRequest,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -162,7 +235,7 @@ func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 			Msg:        "Malformed JSON recieved",
 			Httpstatus: http.StatusBadRequest,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -173,7 +246,7 @@ func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 			Msg:        linkInfoError.Error(),
 			Httpstatus: http.StatusInternalServerError,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -198,7 +271,7 @@ func ReportLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 			Msg:        "Nothing sent in the body!",
 			Httpstatus: http.StatusBadRequest,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -209,7 +282,7 @@ func ReportLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 			Msg:        "Malformed JSON recieved",
 			Httpstatus: http.StatusBadRequest,
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 
@@ -224,7 +297,7 @@ func ReportLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 		} else {
 			err.Httpstatus = http.StatusBadRequest
 		}
-		err.NewApiError(&w)
+		err.NewApiError(w)
 		return
 	}
 

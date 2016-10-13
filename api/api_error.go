@@ -10,7 +10,7 @@ type APIError struct {
 	Httpstatus int    `json:"code"`
 }
 
-func (err *APIError) NewApiError(w *http.ResponseWriter) {
-	(*w).Header().Set("Content-Type", "application/json")
-	json.NewEncoder(*w).Encode(err)
+func (err *APIError) NewApiError(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(err)
 }
