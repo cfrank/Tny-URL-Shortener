@@ -33,7 +33,6 @@ type linkHisory struct {
 	Created    int64  `json:"created"`
 	Abuseflags uint16 `json:"flags"`
 	Clicks     int    `json:"clicks"`
-	Httpstatus int    `json:"code"`
 }
 type linkEndPoint struct {
 	Linkid     string `json:"linkid"`

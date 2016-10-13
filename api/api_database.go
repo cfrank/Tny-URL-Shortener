@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/cfrank/tny.al/constants"
 	"github.com/cfrank/tny.al/database"
 	"github.com/cfrank/tny.al/link"
 )
@@ -45,7 +46,12 @@ func getLinkHistory(user *userInfo, linkData *[]linkHisory) error {
 	}
 	defer rows.Close()
 
+	historyEntries := 0
 	for rows.Next() {
+		// Only return a maximum of MAX_HISTORY entries
+		if historyEntries >= constants.MAX_HISTORY {
+			return nil
+		}
 		var link linkHisory = linkHisory{}
 		scanError := rows.Scan(&link.Linkid, &link.Source, &link.Created, &link.Abuseflags, &link.Clicks)
 
@@ -55,6 +61,7 @@ func getLinkHistory(user *userInfo, linkData *[]linkHisory) error {
 
 		// Add the link to the slice
 		*linkData = append(*linkData, link)
+		historyEntries++
 	}
 	return nil
 }
