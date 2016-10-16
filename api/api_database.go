@@ -46,6 +46,7 @@ func getLinkHistory(user *userInfo, linkData *[]linkHisory) error {
 	}
 	defer rows.Close()
 
+	// Keep track of how many entries are returned
 	historyEntries := 0
 	for rows.Next() {
 		// Only return a maximum of MAX_HISTORY entries

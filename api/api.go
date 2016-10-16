@@ -201,7 +201,7 @@ func GetHistory(w http.ResponseWriter, req *http.Request, params map[string]stri
 		return
 	}
 
-	// We have successfully obtained the links from this user
+	// We have successfully obtained the links for this user
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(userLinks)
 }

@@ -75,6 +75,24 @@ export function ValidateLinkid(linkid){
 }
 
 /*
+ * Format a date for display to the user
+ * 
+ * Use the format Oct 14 2016
+ * 
+ * @param int64 unixTime
+ * @returns String
+ */
+export function FormatDate(unixTime){
+        if(unixTime !== undefined){
+                let date = new Date(unixTime * 1000),
+                month = Constants.MONTHS[date.getMonth()],
+                day = date.getDate(),
+                year = date.getFullYear();
+                return `${month} ${day} ${year}`;
+        }
+}
+
+/*
  * Fetch json data from specified href argument
  * 
  * @returns Promise|Error

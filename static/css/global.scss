@@ -4,9 +4,23 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 html,body{
     height: 100%;
 }
+
+.flex-box{
+    display: flex;
+    
+    & > .left-side{
+        margin-right: auto;
+    }
+    
+    & > .right-side{
+        margin-left: auto;
+    }
+}
+
 // Style for interior pages
 .interior-page{
     width: 100%;

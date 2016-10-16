@@ -2,7 +2,7 @@
     <div class="link-expose" :class="{'active': show}">
         <p>The shortened url points to: <br />
         <a class="source" :href="data.source" target="_blank">{{data.source}}</a></p><br />
-        <p>The url was created on: <span class="date">{{formatDate(data.created)}}</span></p><br />
+        <p>The url was created on: <span class="date">{{FormatDate(data.created)}}</span></p><br />
         <p>The url has been reported <span class="flags">{{data.flags}}</span> {{pluralize(data.flags, 'time')}}</p>
     </div>
 </template>
@@ -34,6 +34,7 @@
 
 <script>
     import * as Constants from '../filters/constants';
+    import {FormatDate} from '../filters/';
     
     export default{
         name: 'link-expose',
@@ -41,15 +42,7 @@
         props: ['data', 'show'],
         
         methods:{
-            formatDate: function(unixTime){
-                if(unixTime !== undefined){
-                    let date = new Date(unixTime * 1000),
-                        month = Constants.MONTHS[date.getMonth()],
-                        day = date.getDate(),
-                        year = date.getFullYear();
-                    return `${month} ${day} ${year}`;
-                }
-            },
+            FormatDate: FormatDate,
             
             pluralize: function(num, word){
                 if(num === 0 || num > 1){

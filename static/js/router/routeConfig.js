@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import ShortenView from '../views/ShortenView.vue';
 import UnshortenView from '../views/UnshortenView.vue';
 import ReportView from '../views/ReportView.vue';
+import HistoryView from '../views/HistoryView.vue';
 
 Vue.use(VueRouter); // Expose Vuerouter to Vue
 
@@ -18,7 +19,10 @@ const configRoutes = [
                 path: '/',
                 component: ShortenView
         },
-        // Todo: history
+        {
+                path: '/pages/history',
+                component: HistoryView
+        },
         {
                 path: '/pages/unshorten',
                 component: UnshortenView
