@@ -19,7 +19,11 @@ export const showLinkSuccess = ({commit}, payload) => {
         const title = payload.title;
         const linkHref = payload.linkHref;
         
-        commit('SHOW_LINK_SUCCESS', {active, title, linkHref});
+        commit('SHOW_LINK_SUCCESS', {
+                active,
+                title,
+                linkHref
+        });
 }
 
 export const hideLinkSuccess = ({commit}) => {
@@ -28,4 +32,16 @@ export const hideLinkSuccess = ({commit}) => {
 
 export const updateFormValue = ({commit}, payload) => {
         commit('UPDATE_FORM_VALUE', payload);
+}
+
+export const cacheHistory = ({commit}, payload) => {
+        commit('CACHE_HISTORY', {
+                links: payload.links,
+                length: payload.length,
+                stale: payload.stale
+        });
+}
+
+export const expireHistoryCache = ({commit}) => {
+        commit('EXPIRE_HISTORY_CACHE');
 }

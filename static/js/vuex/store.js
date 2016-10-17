@@ -36,10 +36,30 @@ const LINK_SUCCESS = {
         linkHref: '',
 }
 
+/*
+ * State for history cache
+ * 
+ * Keeps a cache of the history links array, and length as well
+ * as a variable telling if the cache is stale.
+ * 
+ * Used so that a db/api call is needed everytime the user goes to the history
+ * page
+ * 
+ * links -> the history link array
+ * length -> int representing the number of history items
+ * stale -> if true refresh the cache
+ */
+const HISTORY_CACHE = {
+        links: [],
+        length: 0,
+        stale: true,
+}
+
 const state = {
         notice: NOTIFICATION_HEADER,
         linkSuccess: LINK_SUCCESS,
-        formValue: ''
+        formValue: '',
+        historyCache: HISTORY_CACHE
 };
 
 const store =  new Vuex.Store({

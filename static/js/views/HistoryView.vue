@@ -3,7 +3,7 @@
         <div v-if="historyAvailable" class="history-container">
             <history-entry v-for="item in historyItems" :item="item"></history-entry>
         </div>
-        <div v-else class="history-loading"></div>
+        <div v-else class="history-status" :class="{'loading': historyAvailable !== true}"></div>
     </div>
 </template>
 
@@ -31,7 +31,7 @@
         }
     }
     
-    .history-loading{
+    .history-loading.loading{
         width: 24px;
         height: 24px;
         margin: 0 auto;
@@ -43,6 +43,7 @@
 </style>
 
 <script>
+    import { mapGetters } from 'vuex';
     import * as Constants from '../filters/constants';
     import {JsonPostRequest} from '../filters/';
     import {NoticeUserError} from '../filters/ErrorClass';
@@ -64,25 +65,39 @@
             HistoryEntry
         },
         
+        computed: mapGetters(['historyCache']),
+        
         /* Run when the component is created */
         created: function(){
             let userId = window.localStorage.getItem(Constants.USERID_LOCALSTORAGE);
             let userKey = window.localStorage.getItem(Constants.USERID_KEY_LOCALSTORAGE);
             
-            if(this.historyAvailable !== true){
+            if(this.historyCache.stale === true){
                 JsonPostRequest('/api/history', {userId, userKey}).then(function(response){
                     if(response !== false && response.length > 0 && response.code === 200){
                         this.historyAvailable = true;
                         this.historyItems = response.links;
+                        this.$store.dispatch('cacheHistory', {
+                            links: response.links,
+                            length: response.length,
+                            stale: false
+                        });
                     }
                     else if(response.length === 0){
                         this.historyUnavailable = true;
                     }
                     else{
-                        const historyApiError = new NoticeUserError(response.message, false);
+                        const historyApiError = new NoticeUserError(response.message, true);
                         historyApiError.show();
                     }
                 }.bind(this));
+            }
+            else if(!this.historyCache.length > 0){
+                this.historyUnavailable = true
+            }
+            else{
+                this.historyAvailable = true;
+                this.historyItems = this.historyCache.links;
             }
         }
     }

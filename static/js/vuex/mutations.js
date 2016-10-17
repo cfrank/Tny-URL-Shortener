@@ -32,5 +32,17 @@ export default{
         REMOVE_UID(state){
                 window.localStorage.removeItem(USERID_LOCALHOST);
                 state.userId = '';
+        },
+        
+        CACHE_HISTORY(state, message){
+                state.historyCache = message;
+        },
+        
+        EXPIRE_HISTORY_CACHE(state){
+                state.historyCache = {
+                        links: [],
+                        length: 0,
+                        stale: true,
+                }
         }
 }

@@ -13,3 +13,7 @@ export const notice = state => {
 export const formValue = state => {
         return state.formValue;
 }
+
+export const historyCache = state => {
+        return state.historyCache;
+}

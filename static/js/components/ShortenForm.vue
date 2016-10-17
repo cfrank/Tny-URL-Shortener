@@ -82,7 +82,7 @@
             }
         },
         
-        computed: mapGetters(['linkSuccess', 'formValue']),
+        computed: mapGetters(['linkSuccess', 'formValue', 'historyCache']),
         
         methods:{
             /*
@@ -98,7 +98,7 @@
                 try{
                     // Create the object which will be sent to the db
                     let linkData = {
-                        source: ValidateUrl(this.$store.state.formValue),
+                        source: ValidateUrl(this.formValue),
                         userid: window.localStorage.getItem(Constants.USERID_LOCALSTORAGE),
                         userkey: window.localStorage.getItem(Constants.USERID_KEY_LOCALSTORAGE),
                         created: ~~(Date.now() / 1000),
@@ -116,6 +116,9 @@
                                     title: 'Your short link: ',
                                     linkHref: `${location.origin}/${response.link.linkid}`,
                                 });
+                                if(this.historyCache.stale === false){
+                                    this.$store.dispatch('expireHistoryCache');
+                                }
                             }
                         }
                     }.bind(this));
