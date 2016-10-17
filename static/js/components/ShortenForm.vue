@@ -114,7 +114,7 @@
                             }else{
                                 this.$store.dispatch('showLinkSuccess', {
                                     title: 'Your short link: ',
-                                    linkHref: `${location.origin}/${response.linkid}`,
+                                    linkHref: `${location.origin}/${response.link.linkid}`,
                                 });
                             }
                         }

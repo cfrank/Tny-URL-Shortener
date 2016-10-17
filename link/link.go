@@ -14,14 +14,14 @@ import (
 )
 
 type Link struct {
-	Linkid     string `json:"linkid"`
-	Source     string `json:"source"`
-	Created    int64  `json:"created"`
-	Userid     string `json:"userid"`
-	Userkey    string `json:"userkey"`
-	Abuseflags uint16 `json:"abuseflags"`
-	Clicks     uint   `json:"clicks"`
-	Expires    int64  `json:"expires"`
+	Linkid     string  `json:"linkid"`
+	Source     string  `json:"source"`
+	Created    int64   `json:"created"`
+	Userid     *string `json:"userid,omitempty"`
+	Userkey    *string `json:"userkey,omitempty"`
+	Abuseflags *uint16 `json:"abuseflags,omitempty"`
+	Clicks     *uint   `json:"clicks,omitempty"`
+	Expires    *int64  `json:"expires,omitempty"`
 }
 
 func NewLink() *Link {

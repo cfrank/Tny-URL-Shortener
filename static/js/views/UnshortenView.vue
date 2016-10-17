@@ -51,7 +51,7 @@
                                 const apiError = new NoticeUserError(response.message, true);
                                 apiError.show();
                             }else{
-                                this.linkData = response;
+                                this.linkData = response.link;
                                 this.dataAvailable = true;
                             }
                         }

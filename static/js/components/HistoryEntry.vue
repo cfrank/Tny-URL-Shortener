@@ -2,7 +2,7 @@
     <div class="history-entry">
         <history-topbar :linkid="item.linkid" :source="this.hostname"></history-topbar>
         <div class="history-body">
-            <history-info :created="item.created" :clicks="item.clicks" :flags="item.flags"></history-info>
+            <history-info :created="item.created" :clicks="item.clicks" :flags="item.abuseflags"></history-info>
             <history-source :source="item.source"></history-source>
         </div>
     </div>

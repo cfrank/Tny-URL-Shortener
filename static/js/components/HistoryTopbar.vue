@@ -1,9 +1,7 @@
 <template>
     <div class="top-bar flex-box">
         <div class="history-short-link left-side">
-            <a :href="getShortUrl(linkid)" target="_blank">
-                {{getShortUrl(linkid)}}
-            </a>
+            <a :href="getShortUrl(linkid)" target="_blank">{{getShortUrl(linkid)}}</a>
         </div>
         <div class="history-favicon right-side">
             <img :src="`https://s2.googleusercontent.com/s2/favicons?alt=s32&sz=32&domain_url=${source}`" height="32" width="32" />

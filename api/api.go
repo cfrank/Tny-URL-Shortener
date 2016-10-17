@@ -17,6 +17,17 @@ import (
 	"github.com/cfrank/tny.al/utils"
 )
 
+type singleLink struct {
+	Link       *link.Link `json:"link"`
+	Httpstatus int        `json:"code"`
+}
+
+type multipleLinks struct {
+	Links      *[]link.Link `json:"links"`
+	Length     int          `json:"length"`
+	Httpstatus int          `json:"code"`
+}
+
 type apiSuccess struct {
 	Message    string `json:"message"`
 	Httpstatus int    `json:"code"`
@@ -25,26 +36,6 @@ type apiSuccess struct {
 type userInfo struct {
 	Userid  string `json:"userid"`
 	Userkey string `json:"userkey"`
-}
-
-type linkHisory struct {
-	Linkid     string `json:"linkid"`
-	Source     string `json:"source"`
-	Created    int64  `json:"created"`
-	Abuseflags uint16 `json:"flags"`
-	Clicks     int    `json:"clicks"`
-}
-type linkEndPoint struct {
-	Linkid     string `json:"linkid"`
-	Created    int64  `json:"created"`
-	Httpstatus int    `json:"code"`
-}
-
-type exposedLink struct {
-	Source     string `json:"source"`
-	Created    int64  `json:"created"`
-	Abuseflags uint16 `json:"flags"`
-	Httpstatus int    `json:"code"`
 }
 
 /*
@@ -99,7 +90,7 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	}
 
 	// Make sure that the userid and userkey are correct
-	validUserId := utils.CheckHmac([]byte(shortLink.Userid), shortLink.Userkey)
+	validUserId := utils.CheckHmac([]byte(*shortLink.Userid), *shortLink.Userkey)
 
 	if validUserId != true {
 		err := &APIError{
@@ -136,14 +127,12 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	}
 
 	// Return the linkid to the user
-	var endpoint linkEndPoint = linkEndPoint{
-		Linkid:     shortLink.Linkid,
-		Created:    shortLink.Created,
+	var addedLink singleLink = singleLink{
+		Link:       shortLink,
 		Httpstatus: http.StatusOK,
 	}
-
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(endpoint)
+	json.NewEncoder(w).Encode(addedLink)
 }
 
 /*
@@ -156,7 +145,7 @@ func Add(w http.ResponseWriter, req *http.Request, params map[string]string) {
 func GetHistory(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	var user userInfo
 	// Set up a slice to hold users links
-	var userLinks []linkHisory = []linkHisory{}
+	var userLinks []link.Link = []link.Link{}
 
 	if req.Body == nil {
 		err := &APIError{
@@ -201,9 +190,24 @@ func GetHistory(w http.ResponseWriter, req *http.Request, params map[string]stri
 		return
 	}
 
+	if len(userLinks) < 1 {
+		err := &APIError{
+			Msg:        "This user does not have any history items",
+			Httpstatus: http.StatusNoContent,
+		}
+		err.NewApiError(w)
+		return
+	}
+
+	var history multipleLinks = multipleLinks{
+		Links:      &userLinks,
+		Length:     len(userLinks),
+		Httpstatus: http.StatusOK,
+	}
+
 	// We have successfully obtained the links for this user
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(userLinks)
+	json.NewEncoder(w).Encode(history)
 }
 
 /*
@@ -216,7 +220,7 @@ func GetHistory(w http.ResponseWriter, req *http.Request, params map[string]stri
  */
 func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]string) {
 	var linkid string
-	var linkInfo exposedLink = exposedLink{}
+	var linkInfo link.Link = link.Link{}
 
 	if req.Body == nil {
 		err := &APIError{
@@ -228,6 +232,7 @@ func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 	}
 
 	jsonError := json.NewDecoder(req.Body).Decode(&linkid)
+	linkInfo.Linkid = linkid
 
 	if jsonError != nil {
 		err := &APIError{
@@ -250,9 +255,12 @@ func ExposeLink(w http.ResponseWriter, req *http.Request, params map[string]stri
 	}
 
 	// There were no errors
-	linkInfo.Httpstatus = http.StatusOK
+	var exposedLink singleLink = singleLink{
+		Link:       &linkInfo,
+		Httpstatus: http.StatusOK,
+	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(linkInfo)
+	json.NewEncoder(w).Encode(exposedLink)
 }
 
 /*

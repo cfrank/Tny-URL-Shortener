@@ -55,6 +55,7 @@
         data(){
             return{
                 historyAvailable: false,
+                historyUnavailable: false,
                 historyItems: []
             }
         },
@@ -70,9 +71,12 @@
             
             if(this.historyAvailable !== true){
                 JsonPostRequest('/api/history', {userId, userKey}).then(function(response){
-                    if(response !== false && Array.isArray(response)){
+                    if(response !== false && response.length > 0 && response.code === 200){
                         this.historyAvailable = true;
-                        this.historyItems = response;
+                        this.historyItems = response.links;
+                    }
+                    else if(response.length === 0){
+                        this.historyUnavailable = true;
                     }
                     else{
                         const historyApiError = new NoticeUserError(response.message, false);

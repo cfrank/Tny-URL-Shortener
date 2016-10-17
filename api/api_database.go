@@ -38,7 +38,7 @@ func SaveLink(shortLink *link.Link) bool {
  * based on the provided userid. Save the information to the link array
  * pointer
  */
-func getLinkHistory(user *userInfo, linkData *[]linkHisory) error {
+func getLinkHistory(user *userInfo, linkData *[]link.Link) error {
 	rows, queryError := database.MyDb.Db.Query(`SELECT linkid, source, created, abuseflags, clicks FROM link WHERE userid =?`, user.Userid)
 
 	if queryError != nil {
@@ -53,15 +53,15 @@ func getLinkHistory(user *userInfo, linkData *[]linkHisory) error {
 		if historyEntries >= constants.MAX_HISTORY {
 			return nil
 		}
-		var link linkHisory = linkHisory{}
-		scanError := rows.Scan(&link.Linkid, &link.Source, &link.Created, &link.Abuseflags, &link.Clicks)
+		var entry link.Link = link.Link{}
+		scanError := rows.Scan(&entry.Linkid, &entry.Source, &entry.Created, &entry.Abuseflags, &entry.Clicks)
 
 		if scanError != nil {
 			return scanError
 		}
 
 		// Add the link to the slice
-		*linkData = append(*linkData, link)
+		*linkData = append(*linkData, entry)
 		historyEntries++
 	}
 	return nil
@@ -73,7 +73,7 @@ func getLinkHistory(user *userInfo, linkData *[]linkHisory) error {
  * Take a linkid and a reference to a struct and return the data to that
  * reference.
  */
-func GetLinkData(linkid string, linkData *exposedLink) error {
+func GetLinkData(linkid string, linkData *link.Link) error {
 	query := database.MyDb.Db.QueryRow(`SELECT source, created, abuseflags FROM link WHERE linkid =?`, linkid)
 	queryError := query.Scan(&linkData.Source, &linkData.Created, &linkData.Abuseflags)
 
