@@ -39,7 +39,9 @@ func SaveLink(shortLink *link.Link) bool {
  * pointer
  */
 func getLinkHistory(user *userInfo, linkData *[]link.Link) error {
-	rows, queryError := database.MyDb.Db.Query(`SELECT linkid, source, created, abuseflags, clicks FROM link WHERE userid =?`, user.Userid)
+	// Order by creation date
+	rows, queryError := database.MyDb.Db.Query(`SELECT linkid, source, created, abuseflags, clicks FROM link
+						WHERE userid =? ORDER BY created DESC`, user.Userid)
 
 	if queryError != nil {
 		return queryError

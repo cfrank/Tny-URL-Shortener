@@ -15,6 +15,7 @@
     .footer-menu{
         width: 100%;
         height: auto;
+        background-color: $tny-blue;
         padding-bottom: 10px;
         position: absolute;
         bottom: 0;

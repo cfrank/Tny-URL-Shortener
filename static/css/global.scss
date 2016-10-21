@@ -30,8 +30,10 @@ html,body{
     box-shadow: $elm-shadow;
     
     // Intro style for interior pages
-    & > .intro{
-        margin-bottom: 25px;
+    & > section{
+        &.intro{
+            margin-bottom: 25px;
+        }
         
         & > p{
             font-family: $pt-sans;

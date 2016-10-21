@@ -4,6 +4,7 @@ import ShortenView from '../views/ShortenView.vue';
 import UnshortenView from '../views/UnshortenView.vue';
 import ReportView from '../views/ReportView.vue';
 import HistoryView from '../views/HistoryView.vue';
+import AboutView from '../views/AboutView.vue';
 
 Vue.use(VueRouter); // Expose Vuerouter to Vue
 
@@ -30,6 +31,10 @@ const configRoutes = [
         {
                 path: '/pages/report',
                 component: ReportView
+        },
+        {
+                path: '/pages/about',
+                component: AboutView
         }
 ]
 

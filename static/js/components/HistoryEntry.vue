@@ -13,7 +13,9 @@
     
     .history-entry{
         width: 100%;
+        max-width: 650px;
         max-height: 200px;
+        margin: 0 auto;
         background-color: #f4f4f4;
         box-shadow: $elm-shadow;
         

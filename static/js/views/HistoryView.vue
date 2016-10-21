@@ -1,9 +1,16 @@
 <template>
     <div class="history-view">
-        <div v-if="historyAvailable" class="history-container">
+        <div v-if="historyLoading === false && this.historyUnavailable === false" class="history-container">
             <history-entry v-for="item in historyItems" :item="item"></history-entry>
         </div>
-        <div v-else class="history-status" :class="{'loading': historyAvailable !== true}"></div>
+        <div v-else class="history-status">
+            <!-- Loading -->
+            <div class="history-loading" :class="{'active': this.historyLoading}"></div>
+            <!-- No history items -->
+            <div class="history-empty" :class="{'active': this.historyUnavailable}">
+                <p>You have no history items!</p>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -21,9 +28,7 @@
     
     .history-view{
         width: 100%;
-        max-width: 650px;
-        max-height: 80vh;
-        margin: 0 auto;
+        max-height: 95vh;
         overflow-y: auto;
         
         &::-webkit-scrollbar{
@@ -31,7 +36,7 @@
         }
     }
     
-    .history-loading.loading{
+    .history-loading.active{
         width: 24px;
         height: 24px;
         margin: 0 auto;
@@ -39,6 +44,16 @@
         border-top-color: #fff;
         border-radius: 50%;
         animation: spin 755ms infinite linear;
+    }
+    
+    .history-empty{
+        width: 100%;
+        text-align: center;
+        display: none;
+        
+        &.active{
+            display: block;
+        }
     }
 </style>
 
@@ -55,7 +70,7 @@
         
         data(){
             return{
-                historyAvailable: false,
+                historyLoading: true,
                 historyUnavailable: false,
                 historyItems: []
             }
@@ -75,7 +90,7 @@
             if(this.historyCache.stale === true){
                 JsonPostRequest('/api/history', {userId, userKey}).then(function(response){
                     if(response !== false && response.length > 0 && response.code === 200){
-                        this.historyAvailable = true;
+                        this.historyLoading = false;
                         this.historyItems = response.links;
                         this.$store.dispatch('cacheHistory', {
                             links: response.links,
@@ -83,20 +98,23 @@
                             stale: false
                         });
                     }
-                    else if(response.length === 0){
+                    else if(response.code === 204){
+                        // No history items
+                        this.historyLoading = false;
                         this.historyUnavailable = true;
                     }
                     else{
-                        const historyApiError = new NoticeUserError(response.message, true);
+                        const historyApiError = new NoticeUserError("Error retrieving history from server", true);
                         historyApiError.show();
                     }
                 }.bind(this));
             }
             else if(!this.historyCache.length > 0){
-                this.historyUnavailable = true
+                this.historyLoading = false;
+                this.historyUnavailable = true;
             }
             else{
-                this.historyAvailable = true;
+                this.historyLoading = false;
                 this.historyItems = this.historyCache.links;
             }
         }
