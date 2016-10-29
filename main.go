@@ -16,7 +16,6 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/cfrank/tny.al/admin"
 	"github.com/cfrank/tny.al/api"
 	"github.com/cfrank/tny.al/database"
 	"github.com/cfrank/tny.al/link"
@@ -41,10 +40,6 @@ func main() {
 	apiRoute.POST("/history", api.GetHistory)
 	apiRoute.POST("/unshorten", api.ExposeLink)
 	apiRoute.POST("/report", api.ReportLink)
-
-	// Handles all Admin routes
-	adminRoute := router.NewGroup("/admin")
-	adminRoute.GET("/:task", admin.Handle)
 
 	// Open a connection to the database
 	databaseError := database.OpenDatabase()
