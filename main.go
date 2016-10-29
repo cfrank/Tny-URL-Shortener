@@ -4,7 +4,6 @@
  * handlers, namely:
  * - API
  * - shortlink
- * - Admin
  */
 
 package main
