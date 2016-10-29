@@ -8,7 +8,7 @@ I built this as a fun project to teach myself Vue.js and Go. It is currently sti
 in development and is not ready for production, but I wanted to release the code
 publically.
 
-This run ontop of Nginx, and routes everything except static files, api calls, and /:linkid
+This runs ontop of Nginx, and routes everything except static files, api calls, and /:linkid
 calls to the Vue.js instance which then routes them to any pages which have been defined
 in the route config.
 
